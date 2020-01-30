@@ -1,0 +1,34 @@
+{
+    "name": "redux-ecosystem",
+    "version": "1.0.0",
+    "description": "The website of Redux-related addons, libraries, and utilities based on https://github.com/markerikson/redux-ecosystem-links",
+    "repository": {
+        "type": "github",
+        "url": "git@github.com:nmay231/redux-ecosystem.git"
+    },
+    "author": "Noah May",
+    "scripts": {
+        "dev": "next",
+        "build": "npm run build:scss && npm run build:next",
+        "build:next": "next build",
+        "build:scss": "node-sass scss/custom.scss scss/custom.css",
+        "start": "next start",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@types/isomorphic-fetch": "0.0.35",
+        "bootstrap": "^4.4.1",
+        "isomorphic-fetch": "^2.2.1",
+        "next": "^9.2.1",
+        "node-sass": "^4.13.1",
+        "react": "^16.12.0",
+        "react-dom": "^16.12.0",
+        "react-icons": "^3.9.0"
+    },
+    "devDependencies": {
+        "@types/node": "^13.5.1",
+        "@types/react": "^16.9.19",
+        "typescript": "^3.7.5"
+    }
+}
