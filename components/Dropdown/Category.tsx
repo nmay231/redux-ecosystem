@@ -15,10 +15,7 @@ interface CategoryProps {
 
 const CategoryDropdown: NextPage<CategoryProps> = ({ category }) => {
     const router = useRouter()
-    const currentSlug = router.asPath
-        .split('/')
-        .slice(2)
-        .join('/')
+    const currentSlug = router.asPath.split('/')[2]
     const [opened, setOpened] = useState(category.slug == currentSlug)
 
     const totalRepoCount = useMemo(
@@ -30,7 +27,7 @@ const CategoryDropdown: NextPage<CategoryProps> = ({ category }) => {
     return (
         <div>
             <li className={styles.category_list}>
-                <Link as={category.slug} href={category.slug}>
+                <Link as={'/topic/' + category.slug} href={'/topic/' + category.slug}>
                     <a onClick={() => setOpened(!opened)}>{category.name}</a>
                 </Link>
                 {opened && (

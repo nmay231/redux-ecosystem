@@ -20,6 +20,15 @@
     height: calc(100vh - 5rem);
 }
 
+.divider {
+    position: absolute;
+    top: -5rem;
+    right: -0.5rem;
+    background-color: #5c5c5c66;
+    width: 2px;
+    height: 100vh;
+}
+
 .content {
     margin-top: 4rem;
     margin-left: 22rem !important;

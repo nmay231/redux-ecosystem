@@ -4,6 +4,7 @@
 html body {
     margin: 0;
     padding: 0;
+    background-color: #eff1f3;
     font-family: Lato, sans-serif;
 }
 
@@ -16,26 +17,22 @@ html body {
 
 /* set the overriding variables */
 $grid-breakpoints: (
-    xxxs: 0,
-    xxs: 320px,
+    xxs: 0,
     xs: 568px,
     sm: 667px,
     md: 768px,
     lg: 992px,
-    xl: 1200px,
-    xxl: 1440px,
-    xxxl: 1600px,
+    xl: 1300px,
+    xxl: 1600px,
 );
 $container-max-widths: (
-    xxxs: 0,
-    xxs: 320px,
+    xxs: 0,
     xs: 568px,
     sm: 667px,
     md: 768px,
     lg: 992px,
-    xl: 1200px,
-    xxl: 1440px,
-    xxxl: 1600px,
+    xl: 1300px,
+    xxl: 1600px,
 );
 
 /* override the !default vars with the values we set above */

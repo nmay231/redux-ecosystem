@@ -5,9 +5,8 @@
     box-shadow: 0 1px 2px rgba(10, 10, 10, 0.1);
     transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
     position: relative;
-    cursor: pointer;
     padding: 0.4rem;
-    height: 16rem;
+    height: 18rem;
 }
 
 .card_container:hover {
@@ -39,7 +38,8 @@
     width: 45%;
 }
 
-.description {
+.description,
+.description_links {
     font-size: 1rem;
     line-height: 1.5;
     color: #5e5e5e;
@@ -49,24 +49,23 @@
     height: 25%;
 }
 
+.description_links {
+    font-size: 0.8rem;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    left: 0.3rem;
+    bottom: 3rem;
+    overflow: hidden;
+}
+
 .stats {
     position: absolute;
+    display: flex;
     font-weight: 100;
-    padding: 0 10px 10px 0;
-    bottom: 0;
-    right: 0;
-}
-
-.date {
-    position: absolute;
-    color: var(--redux);
-    padding: 10px 17px;
-    font-size: 0.9rem;
-    font-weight: 100;
+    padding: 0 10px 10px 10px;
+    width: 100%;
     bottom: 0;
     left: 0;
-}
-
-.date span {
-    color: black;
 }

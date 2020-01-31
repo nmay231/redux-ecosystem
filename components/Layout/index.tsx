@@ -30,6 +30,7 @@ const Layout: NextPage<LayoutProps> = ({ children, data, includeSidebar = true, 
                 {includeSidebar && (
                     <div className={styles.sidebar}>
                         <Dropdown categories={data.categories} />
+                        <div className={styles.divider}></div>
                     </div>
                 )}
                 <div className={styles.content}>

@@ -2,8 +2,10 @@
 
 .link {
     padding-left: 0.6rem;
+    transition: padding-left 0.3s;
 }
 .link:hover {
     text-decoration: none;
-    padding-left: 0.7rem;
+    padding-left: 0.8rem;
+    transition: padding-left 0.3s;
 }
