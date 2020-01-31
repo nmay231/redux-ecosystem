@@ -1,0 +1,9 @@
+/** @format */
+
+.link {
+    padding-left: 0.6rem;
+}
+.link:hover {
+    text-decoration: none;
+    padding-left: 0.7rem;
+}

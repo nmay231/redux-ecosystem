@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { NextPage } from 'next'
-import Meta from '../components/Meta'
+import Meta from '../components/Layout/Meta'
 
 interface RootProps {
     test?: string

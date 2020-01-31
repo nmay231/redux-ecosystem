@@ -3,10 +3,10 @@
 export interface TCategory {
     name: string
     slug: string
-    subcategories: TSubCategory[]
+    subcategories: TSubcategory[]
 }
 
-export interface TSubCategory {
+export interface TSubcategory {
     name: string
     slug: string
     repositories: TRepository[]
@@ -15,25 +15,9 @@ export interface TSubCategory {
 export interface TRepository {
     name: string
     description: string
-    githubURL: string
-    altURLs: string[]
-    npmDownloadsMonth: number
+    github_url: string
+    githubLastUpdate: string
     githubStars: number
-}
-
-// Probably don't need this...
-export namespace DB {
-    export interface Category {
-        name: string
-        slug: string
-        subcategories: SubCategory[]
-    }
-
-    export interface SubCategory {
-        name: string
-        slug: string
-        repositories: Repository[]
-    }
-
-    export interface Repository extends Client.Repository {}
+    alt_urls: string[]
+    npmDownloadsThisMonth: number
 }

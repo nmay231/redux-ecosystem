@@ -1,6 +1,6 @@
 /** @format */
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+import '../scss/custom.css'
 import '../public/assets/global.css'
 
 const App = ({ Component, pageProps }: any) => {

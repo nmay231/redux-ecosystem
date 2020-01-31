@@ -1,0 +1,42 @@
+/** @format */
+
+// Simple styling
+html body {
+    margin: 0;
+    padding: 0;
+    font-family: Lato, sans-serif;
+}
+
+/**
+ * Overiding bootstrap to add extra breakpoints.
+ * import what we need to override
+ */
+@import '../node_modules/bootstrap/scss/functions';
+@import '../node_modules/bootstrap/scss/variables';
+
+/* set the overriding variables */
+$grid-breakpoints: (
+    xxxs: 0,
+    xxs: 320px,
+    xs: 568px,
+    sm: 667px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1440px,
+    xxxl: 1600px,
+);
+$container-max-widths: (
+    xxxs: 0,
+    xxs: 320px,
+    xs: 568px,
+    sm: 667px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1440px,
+    xxxl: 1600px,
+);
+
+/* override the !default vars with the values we set above */
+@import '../node_modules/bootstrap/scss/bootstrap.scss';

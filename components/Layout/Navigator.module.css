@@ -1,0 +1,12 @@
+/** @format */
+
+.brand {
+    font-size: 2.3rem;
+    margin: 0.3rem 2rem;
+    margin-right: 1rem;
+}
+
+.brand_link:hover {
+    cursor: pointer;
+    color: rgb(43, 55, 66);
+}

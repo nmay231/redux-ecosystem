@@ -1,0 +1,65 @@
+/** @format */
+
+li.category_list {
+    font-size: 0.9rem;
+    padding: 0.5px 0;
+    cursor: pointer;
+    list-style: none;
+    margin: 0.5rem 1rem 0em 2rem;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+.category_list a {
+    color: #004bdf;
+    font-size: 0.8rem;
+}
+
+.category_list a:hover {
+    text-decoration: none;
+}
+
+.hidden_list {
+    height: 0;
+    -webkit-animation: 0.3s backwards list-enter;
+    animation: 0.3s backwards list-enter;
+}
+
+.shown_list {
+    height: 100%;
+    margin-top: 0px;
+    -webkit-animation: 0.3s linear list-enter;
+    animation: 0.3s linear list-enter;
+}
+
+@-webkit-keyframes list-enter {
+    0% {
+        height: 0;
+    }
+    25% {
+        height: 25%;
+    }
+    50% {
+        height: 75%;
+    }
+    75% {
+        opacity: 0.9;
+    }
+}
+
+@keyframes list-enter {
+    0% {
+        height: 0;
+    }
+    25% {
+        height: 25%;
+    }
+    50% {
+        height: 75%;
+    }
+    75% {
+        height: 95%;
+    }
+}

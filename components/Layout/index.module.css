@@ -1,0 +1,26 @@
+/** @format */
+
+.navigator {
+    background-color: gray;
+    position: fixed;
+    z-index: 1001;
+    width: 100%;
+    margin-top: 0;
+    height: 4rem;
+}
+
+.sidebar {
+    left: 0;
+    top: 0;
+    margin-top: 5rem;
+    margin-left: 1.3rem;
+    width: 20rem;
+    position: fixed;
+    z-index: 1000;
+    height: calc(100vh - 5rem);
+}
+
+.content {
+    margin-top: 4rem;
+    margin-left: 22rem !important;
+}
