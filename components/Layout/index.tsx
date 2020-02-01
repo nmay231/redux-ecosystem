@@ -6,7 +6,9 @@ import { NextPage } from 'next'
 import Meta from './Meta'
 import Dropdown from '../Dropdown'
 import Navigator from './Navigator'
+
 import styles from './index.module.css'
+import consts from '../../utils/consts'
 import { TCategory } from '../../typing'
 
 interface LayoutProps {
@@ -42,14 +44,14 @@ const Layout: NextPage<LayoutProps> = ({ children, data, includeSidebar = true, 
 }
 
 Layout.getInitialProps = async ({}) => {
-    const r = await fetch('http://localhost:3000/database.json')
+    const r = await fetch(`${consts.apiURL}/database.json`)
     const data: LayoutProps['data'] = await r.json()
     return {
         data,
         includeSidebar: true,
         title: 'Redux Ecosystem',
         description: 'A collection of links of the Redux Ecosystem',
-        canonical: 'http://localhost:3000',
+        canonical: consts.canonicalURL,
     }
 }
 

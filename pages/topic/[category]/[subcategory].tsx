@@ -7,6 +7,8 @@ import fetch from 'isomorphic-fetch'
 
 import Layout from '../../../components/Layout'
 import CardList from '../../../components/CardList'
+
+import consts from '../../../utils/consts'
 import { TCategory } from '../../../typing'
 
 interface SubcategoryProps {
@@ -35,7 +37,7 @@ const Subcategory: NextPage<SubcategoryProps> = ({ data }) => {
             data={data}
             title={'Redux Ecosystem | ' + category.name}
             description="A collection of Redux-related addons, libraries, and utilities."
-            canonical={'https://localhost:3000' + router.asPath}
+            canonical={consts.canonicalURL + router.asPath}
         >
             <CardList key={category.slug} category={category} />
         </Layout>
@@ -43,7 +45,7 @@ const Subcategory: NextPage<SubcategoryProps> = ({ data }) => {
 }
 
 Subcategory.getInitialProps = async ({}) => {
-    const r = await fetch('http://localhost:3000/database.json')
+    const r = await fetch(`${consts.apiURL}/database.json`)
     const data: SubcategoryProps['data'] = await r.json()
     return { data }
 }
