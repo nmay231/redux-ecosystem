@@ -2,34 +2,35 @@
 
 import React, { useState } from 'react'
 import { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import fetch from 'isomorphic-fetch'
 
-import Meta from '../components/Layout/Meta'
+import CategoryPreview from '../components/Utils/CategoryPreview'
+import Layout from '../components/Layout'
 import consts from '../utils/consts'
+import { TCategory } from '../typing'
 
 interface RootProps {
-    test?: string
+    categories: TCategory[]
 }
 
-const Root: NextPage<RootProps> = ({ test }) => {
-    const router = useRouter()
-    // router.push('/topic/')
-    return <></>
-    const [selected, setSelected] = useState(0)
-    const isSelected = (i: number) => i === selected
+const Root: NextPage<RootProps> = ({ categories }) => {
     return (
-        <>
-            <Meta
-                title="Redux Ecosystem"
-                description="A collection of Redux-related addons, libraries, and utilities."
-                canonical={consts.canonicalURL}
-            />
-        </>
+        <Layout
+            title="Redux Ecosystem | Home page"
+            canonical={consts.canonicalURL}
+            description=""
+            data={{ categories }}
+        >
+            {categories.map((cat) => (
+                <CategoryPreview category={cat} />
+            ))}
+        </Layout>
     )
 }
 
 Root.getInitialProps = async ({}) => {
-    return { test: 'yellow' }
+    const r = await fetch(`${consts.apiURL}/database.json`)
+    return await r.json()
 }
 
 export default Root

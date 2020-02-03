@@ -1,6 +1,6 @@
 /** @format */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
@@ -10,7 +10,11 @@ interface TopicProps {
 
 const Topic: NextPage<TopicProps> = ({}) => {
     const router = useRouter()
-    router.push('/')
+
+    useEffect(() => {
+        router.push('/')
+    }, [])
+
     return <></>
 }
 

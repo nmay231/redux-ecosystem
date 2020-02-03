@@ -1,0 +1,33 @@
+/** @format */
+
+.list_item {
+    margin: 5px 0;
+    cursor: pointer;
+    padding: 1.4rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(10, 10, 10, 0.1);
+    transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
+}
+
+.sub_topic {
+    margin: 0 10px;
+    color: #4183c4;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.link {
+    color: black;
+}
+
+.link:hover,
+.sub_topic:hover {
+    text-decoration: none;
+}
+
+.list_item:hover {
+    -webkit-box-shadow: 0 0 5px #cacaca;
+    box-shadow: 0px 2px 4px #cacaca;
+    -webkit-transition: -webkit-box-shadow 0.5s, border-color 0.25s ease-in-out;
+    transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
+}
