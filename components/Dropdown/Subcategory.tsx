@@ -1,23 +1,23 @@
 /** @format */
 
-import React, { useState } from 'react'
+import React from 'react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 
 import styles from './Subcategory.module.css'
-import { TSubcategory } from '../../typing'
 
 interface SubcategoryProps {
-    subcategory: Pick<TSubcategory, 'name' | 'slug'>
+    name: string
+    slug: string
     repoCount: number
 }
 
-const SubcategoryDropdown: NextPage<SubcategoryProps> = ({ subcategory, repoCount }) => {
+const SubcategoryDropdown: NextPage<SubcategoryProps> = ({ name, slug, repoCount }) => {
     return (
         <div className="d-flex">
-            <Link href={'/topic/' + subcategory.slug}>
+            <Link href={`/topic/${slug}`}>
                 <a className={styles.link}>
-                    {subcategory.name} ({repoCount})
+                    {name} ({repoCount})
                 </a>
             </Link>
         </div>

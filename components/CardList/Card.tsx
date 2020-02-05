@@ -40,7 +40,7 @@ const Card: NextPage<CardProps> = ({ repo }) => {
                 <div className={styles.description_links}>
                     {altURLs.length > 0 && (
                         <>
-                            Other links
+                            Sources
                             {altURLs.map((url) => (
                                 <a
                                     className={styles.link}

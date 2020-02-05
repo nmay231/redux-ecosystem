@@ -18,7 +18,7 @@ const CategoryPreview: NextPage<CategoryPreviewProps> = ({ category }) => {
                 <a className={styles.link}>{category.name}</a>
             </Link>
             {category.subcategories.map((subcategory) => (
-                <Link key={subcategory.slug} href={`/topic/${subcategory.slug}`}>
+                <Link key={subcategory.slug} href={`/topic/${category.slug}/${subcategory.slug}`}>
                     <a className={styles.sub_topic}>{subcategory.name}</a>
                 </Link>
             ))}

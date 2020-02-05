@@ -19,18 +19,17 @@ interface SubcategoryProps {
 
 const Subcategory: NextPage<SubcategoryProps> = ({ data }) => {
     const router = useRouter()
-    const currentSlug = router.asPath
-        .split('/')
-        .slice(2)
-        .join('/')
+    const [_, __, categorySlug, subcategorySlug] = router.asPath.split('/')
 
     const category = useMemo(() => {
         const category = {
-            ...data.categories.find((val) => val.slug === currentSlug.split('/')[0]),
+            ...data.categories.find((val) => val.slug === categorySlug),
         }
-        category.subcategories = category.subcategories.filter((sub) => sub.slug === currentSlug)
+        category.subcategories = category.subcategories.filter(
+            (sub) => sub.slug === subcategorySlug,
+        )
         return category
-    }, [data.categories, currentSlug])
+    }, [data.categories, categorySlug, subcategorySlug])
 
     return (
         <Layout

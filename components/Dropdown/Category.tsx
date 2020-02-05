@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -16,7 +16,6 @@ interface CategoryProps {
 const CategoryDropdown: NextPage<CategoryProps> = ({ category }) => {
     const router = useRouter()
     const currentSlug = router.asPath.split('/')[2]
-    const [opened, setOpened] = useState(category.slug == currentSlug)
 
     const totalRepoCount = useMemo(
         () => category.subcategories.reduce((total, sub) => total + sub.repositories.length, 0),
@@ -28,19 +27,21 @@ const CategoryDropdown: NextPage<CategoryProps> = ({ category }) => {
         <div>
             <li className={styles.category_list}>
                 <Link as={'/topic/' + category.slug} href={'/topic/' + category.slug}>
-                    <a onClick={() => setOpened(!opened)}>{category.name}</a>
+                    <a>{category.name}</a>
                 </Link>
-                {opened && (
-                    <div className={opened ? styles.shown_list : styles.hidden_list}>
+                {category.slug === currentSlug && (
+                    <div>
                         <SubcategoryDropdown
-                            subcategory={allSubcategories}
+                            name={allSubcategories.name}
+                            slug={`${category.slug}`}
                             repoCount={totalRepoCount}
                         />
                         {category.subcategories.length > 1 &&
                             category.subcategories.map((sub) => (
                                 <SubcategoryDropdown
                                     key={sub.slug}
-                                    subcategory={sub}
+                                    name={sub.name}
+                                    slug={`${category.slug}/${sub.slug}`}
                                     repoCount={sub.repositories.length}
                                 />
                             ))}
