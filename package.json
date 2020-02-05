@@ -13,22 +13,26 @@
         "build:next": "next build",
         "build:scss": "node-sass scss/custom.scss scss/custom.css",
         "start": "next start",
+        "fetch-data": "node robot/scraper.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "license": "MIT",
     "dependencies": {
-        "@types/isomorphic-fetch": "0.0.35",
         "bootstrap": "^4.4.1",
+        "download-stats": "^0.3.4",
         "isomorphic-fetch": "^2.2.1",
         "next": "^9.2.1",
-        "node-sass": "^4.13.1",
+        "ora": "^4.0.3",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
-        "react-icons": "^3.9.0"
+        "react-icons": "^3.9.0",
+        "remark": "^11.0.2"
     },
     "devDependencies": {
+        "@types/isomorphic-fetch": "0.0.35",
         "@types/node": "^13.5.1",
         "@types/react": "^16.9.19",
+        "node-sass": "^4.13.1",
         "typescript": "^3.7.5"
     }
 }

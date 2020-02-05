@@ -43,4 +43,6 @@ jspm_packages/
 .vscode/
 database.json
 scss/custom.css
-utils/consts.ts
+utils/consts.js
+robot/links
+robot/errors.json

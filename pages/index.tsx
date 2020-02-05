@@ -22,7 +22,7 @@ const Root: NextPage<RootProps> = ({ categories }) => {
             data={{ categories }}
         >
             {categories.map((cat) => (
-                <CategoryPreview category={cat} />
+                <CategoryPreview key={cat.slug} category={cat} />
             ))}
         </Layout>
     )

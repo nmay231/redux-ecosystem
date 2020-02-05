@@ -15,9 +15,9 @@ export interface TSubcategory {
 export interface TRepository {
     name: string
     description: string
-    github_url: string
+    githubURL: string
     githubLastUpdate: string
     githubStars: number
-    alt_urls: string[]
+    altURLs: string[]
     npmDownloadsThisMonth: number
 }

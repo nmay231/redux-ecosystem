@@ -18,8 +18,8 @@ const Card: NextPage<CardProps> = ({ repo }) => {
         githubLastUpdate: date,
         githubStars: stars,
         name,
-        github_url,
-        alt_urls,
+        githubURL,
+        altURLs,
     } = repo
 
     const description = cropText(repo.description)
@@ -31,17 +31,17 @@ const Card: NextPage<CardProps> = ({ repo }) => {
                     className={styles.link}
                     target="_blank"
                     rel="noreferrer noopener"
-                    href={github_url}
+                    href={githubURL}
                 >
                     <div className={styles.header}>{name}</div>
                     <div className={styles.separator} />
                     <div className={styles.description}>{description}</div>
                 </a>
                 <div className={styles.description_links}>
-                    {alt_urls.length > 0 && (
+                    {altURLs.length > 0 && (
                         <>
                             Other links
-                            {alt_urls.map((url) => (
+                            {altURLs.map((url) => (
                                 <a
                                     className={styles.link}
                                     href={url}
@@ -56,7 +56,7 @@ const Card: NextPage<CardProps> = ({ repo }) => {
                     )}
                 </div>
                 <div className={styles.stats}>
-                    {github_url && (
+                    {githubURL && (
                         <>
                             <span className="mr-auto">Updated: {date}</span>
                             <span>
