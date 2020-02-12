@@ -25,7 +25,7 @@ const CategoryDropdown: React.FC<CategoryProps> = ({ category }) => {
     return (
         <div>
             <li className={styles.category_list}>
-                <Link as={'/topic/' + category.slug} href={'/topic/' + category.slug}>
+                <Link as={'/topic/' + category.slug} href="/topic/[category]">
                     <a>{category.name}</a>
                 </Link>
                 {category.slug === currentSlug && (

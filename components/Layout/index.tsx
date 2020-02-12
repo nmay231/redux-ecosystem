@@ -10,7 +10,7 @@ import styles from './index.module.css'
 import { TCategoryPreview } from '../../typing'
 
 interface LayoutProps {
-    categories?: TCategoryPreview[]
+    categories: TCategoryPreview[]
     includeSidebar?: boolean
     title: string
     description: string

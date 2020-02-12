@@ -1,21 +1,37 @@
 /** @format */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import fetch from '../../utils/fetch'
 
-interface TopicProps {
-    test?: string
+import CategoryPreview from '../../components/Utils/CategoryPreview'
+import Layout from '../../components/Layout'
+import consts from '../../utils/consts'
+import { TCategoryPreview } from '../../typing'
+
+interface RootProps {
+    categories: TCategoryPreview[]
 }
 
-const Topic: NextPage<TopicProps> = ({}) => {
-    const router = useRouter()
-
-    useEffect(() => {
-        router.push('/')
-    }, [])
-
-    return <></>
+const TopicRoot: NextPage<RootProps> = ({ categories }) => {
+    return (
+        <Layout
+            title="Redux Ecosystem | Topics"
+            canonical={consts.canonicalURL}
+            description="A list of all the different topics in the redux ecosystem"
+            categories={categories}
+        >
+            {categories.map((cat) => (
+                <CategoryPreview key={cat.slug} {...cat} />
+            ))}
+        </Layout>
+    )
 }
 
-export default Topic
+TopicRoot.getInitialProps = async ({}) => {
+    const r = await fetch('/api/overview')
+    const { overview } = await r.json()
+    return { categories: overview }
+}
+
+export default TopicRoot

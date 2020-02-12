@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import fetch from 'isomorphic-fetch'
+import fetch from '../../../utils/fetch'
 
 import Layout from '../../../components/Layout'
 import CardList from '../../../components/CardList'
@@ -44,9 +44,9 @@ const Subcategory: NextPage<SubcategoryProps> = ({ overview, detailed }) => {
 
 Subcategory.getInitialProps = async ({ asPath }) => {
     const categorySlug = asPath.split('/')[2]
-    const r = await fetch(`${consts.apiURL}/api/overview`)
+    const r = await fetch('/api/overview')
     const { overview } = await r.json()
-    const r2 = await fetch(`${consts.apiURL}/api/single-category?categorySlug=${categorySlug}`)
+    const r2 = await fetch(`/api/single-category?categorySlug=${categorySlug}`)
     const { detailed } = await r2.json()
     return { overview, detailed }
 }

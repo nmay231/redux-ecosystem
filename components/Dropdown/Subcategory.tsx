@@ -14,7 +14,7 @@ interface SubcategoryProps {
 const SubcategoryDropdown: React.FC<SubcategoryProps> = ({ name, slug, repoCount }) => {
     return (
         <div className="d-flex">
-            <Link href={`/topic/${slug}`}>
+            <Link as={`/topic/${slug}`} href="/topic/[category]/[subcategory]">
                 <a className={styles.link}>
                     {name} ({repoCount})
                 </a>
