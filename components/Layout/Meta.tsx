@@ -1,7 +1,7 @@
 /** @format */
 
+import React from 'react'
 import Head from 'next/head'
-import { NextPage } from 'next'
 
 interface MetaProps {
     title: string
@@ -10,7 +10,7 @@ interface MetaProps {
     image_url?: string
 }
 
-const Meta: NextPage<MetaProps> = ({ title, description, canonical }) => {
+const Meta: React.FC<MetaProps> = ({ title, description, canonical }) => {
     title = title.slice(0, 90)
     description = description.slice(0, 250)
     return (

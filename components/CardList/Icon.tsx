@@ -1,14 +1,13 @@
 /** @format */
 
 import React from 'react'
-import { NextPage } from 'next'
 import { FaDownload, FaGithub, FaStar, FaLink } from 'react-icons/fa'
 
 interface IconProps {
     icon: 'download' | 'github' | 'star' | 'link'
 }
 
-export const Icon: NextPage<IconProps> = ({ icon }) => {
+export const Icon: React.FC<IconProps> = ({ icon }) => {
     return (
         <>
             {icon === 'download' && <FaDownload className="mx-1" size={15} />}

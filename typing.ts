@@ -1,5 +1,7 @@
 /** @format */
 
+import { NextApiRequest, NextApiResponse } from 'next'
+
 export interface TCategory {
     name: string
     slug: string
@@ -20,4 +22,12 @@ export interface TRepository {
     githubStars: number
     altURLs: string[]
     npmDownloadsThisMonth: number
+}
+
+export type Middleware<D = any> = (req: NextApiRequest, res: NextApiResponse<D>) => any
+
+export interface TCategoryPreview {
+    name: string
+    slug: string
+    subcategories: Array<Pick<TSubcategory, 'name' | 'slug'> & { repoCount: number }>
 }

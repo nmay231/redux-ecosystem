@@ -1,14 +1,13 @@
 /** @format */
 
 import React from 'react'
-import { NextPage } from 'next'
 import Link from 'next/link'
 
 import styles from './Navigator.module.css'
 
 interface NavigatorProps {}
 
-const Navigator: NextPage<NavigatorProps> = ({}) => {
+const Navigator: React.FC<NavigatorProps> = ({}) => {
     return (
         <nav>
             <div className={styles.brand}>

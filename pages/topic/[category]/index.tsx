@@ -9,15 +9,14 @@ import Layout from '../../../components/Layout'
 import CardList from '../../../components/CardList'
 
 import consts from '../../../utils/consts'
-import { TCategory } from '../../../typing'
+import { TCategoryPreview, TCategory } from '../../../typing'
 
 interface CategoryProps {
-    data: {
-        categories: TCategory[]
-    }
+    preview: TCategoryPreview[]
+    detailed: TCategory
 }
 
-const Category: NextPage<CategoryProps> = ({ data }) => {
+const Category: NextPage<CategoryProps> = ({ preview, detailed }) => {
     const router = useRouter()
     const currentSlug = router.asPath
         .split('/')
@@ -25,25 +24,29 @@ const Category: NextPage<CategoryProps> = ({ data }) => {
         .join('/')
 
     const category = useMemo(() => {
-        return data.categories.find((val) => val.slug === currentSlug)
-    }, [data.categories, currentSlug])
+        console.log(preview)
+        return preview.find((val) => val.slug === currentSlug)
+    }, [preview, currentSlug])
 
     return (
         <Layout
-            data={data}
+            categories={preview}
             title={'Redux Ecosystem | ' + category.name}
             description="A collection of Redux-related addons, libraries, and utilities."
             canonical={consts.canonicalURL + router.asPath}
         >
-            <CardList key={category.slug} category={category} />
+            <CardList key={category.slug} category={detailed} />
         </Layout>
     )
 }
 
-Category.getInitialProps = async ({}) => {
-    const r = await fetch(`${consts.apiURL}/database.json`)
-    const data: CategoryProps['data'] = await r.json()
-    return { data }
+Category.getInitialProps = async ({ asPath }) => {
+    const categorySlug = asPath.split('/')[2]
+    const r = await fetch(`${consts.apiURL}/api/overview`)
+    const { overview } = await r.json()
+    const r2 = await fetch(`${consts.apiURL}/api/single-category?categorySlug=${categorySlug}`)
+    const { detailed } = await r2.json()
+    return { preview: overview, detailed }
 }
 
 export default Category

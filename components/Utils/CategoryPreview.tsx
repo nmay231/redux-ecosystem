@@ -1,24 +1,25 @@
 /** @format */
 
 import React from 'react'
-import { NextPage } from 'next'
 import Link from 'next/link'
 
 import styles from './CategoryPreview.module.css'
-import { TCategory } from '../../typing'
+import { TSubcategory } from '../../typing'
 
 interface CategoryPreviewProps {
-    category: TCategory
+    name: string
+    slug: string
+    subcategories: Pick<TSubcategory, 'name' | 'slug'>[]
 }
 
-const CategoryPreview: NextPage<CategoryPreviewProps> = ({ category }) => {
+const CategoryPreview: React.FC<CategoryPreviewProps> = ({ name, slug, subcategories }) => {
     return (
         <li className={styles.list_item}>
-            <Link href={`/topic/${category.slug}`}>
-                <a className={styles.link}>{category.name}</a>
+            <Link href={`/topic/${slug}`}>
+                <a className={styles.link}>{name}</a>
             </Link>
-            {category.subcategories.map((subcategory) => (
-                <Link key={subcategory.slug} href={`/topic/${category.slug}/${subcategory.slug}`}>
+            {subcategories.map((subcategory) => (
+                <Link key={subcategory.slug} href={`/topic/${slug}/${subcategory.slug}`}>
                     <a className={styles.sub_topic}>{subcategory.name}</a>
                 </Link>
             ))}

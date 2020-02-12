@@ -1,7 +1,6 @@
 /** @format */
 
 import React from 'react'
-import { NextPage } from 'next'
 
 import Card from './Card'
 import { TCategory } from '../../typing'
@@ -10,7 +9,7 @@ interface CardListProps {
     category: TCategory
 }
 
-const CardList: NextPage<CardListProps> = ({ category }) => {
+const CardList: React.FC<CardListProps> = ({ category }) => {
     return (
         <div className="mt-4">
             <h1>{category.name}</h1>

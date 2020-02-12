@@ -1,14 +1,13 @@
 /** @format */
 
 import React, { useState } from 'react'
-import { NextPage } from 'next'
 
 import Category from './Category'
 import styles from './index.module.css'
-import { TCategory } from '../../typing'
+import { TCategoryPreview } from '../../typing'
 
 interface DropdownProps {
-    categories: TCategory[]
+    categories: TCategoryPreview[]
 }
 
 const dropdownId = 'dropdownDiv'
@@ -22,7 +21,7 @@ const scrollBarStyle = (percentage: number): React.HTMLAttributes<HTMLDivElement
     right: '3px',
 })
 
-const Dropdown: NextPage<DropdownProps> = ({ categories }) => {
+const Dropdown: React.FC<DropdownProps> = ({ categories }) => {
     const [scrollPercentage, setScrollPercentage] = useState(0)
 
     const handleScrollBar: React.UIEventHandler<HTMLDivElement> = (e) => {

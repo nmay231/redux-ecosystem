@@ -9,44 +9,46 @@ import Layout from '../../../components/Layout'
 import CardList from '../../../components/CardList'
 
 import consts from '../../../utils/consts'
-import { TCategory } from '../../../typing'
+import { TCategory, TCategoryPreview } from '../../../typing'
 
 interface SubcategoryProps {
-    data: {
-        categories: TCategory[]
-    }
+    overview: TCategoryPreview[]
+    detailed: TCategory // TODO: detailed is an undescriptive name, please change the server api response...
 }
 
-const Subcategory: NextPage<SubcategoryProps> = ({ data }) => {
+const Subcategory: NextPage<SubcategoryProps> = ({ overview, detailed }) => {
     const router = useRouter()
-    const [_, __, categorySlug, subcategorySlug] = router.asPath.split('/')
+    // TODO: make this more resilient to change please...
+    const subcategorySlug = router.asPath.split('/')[3]
 
-    const category = useMemo(() => {
-        const category = {
-            ...data.categories.find((val) => val.slug === categorySlug),
+    detailed = useMemo(() => {
+        const subcategory = detailed.subcategories.find((sub) => sub.slug === subcategorySlug)
+
+        return {
+            ...detailed,
+            subcategories: [subcategory],
         }
-        category.subcategories = category.subcategories.filter(
-            (sub) => sub.slug === subcategorySlug,
-        )
-        return category
-    }, [data.categories, categorySlug, subcategorySlug])
+    }, [detailed, subcategorySlug])
 
     return (
         <Layout
-            data={data}
-            title={'Redux Ecosystem | ' + category.name}
+            title={'Redux Ecosystem | ' + detailed.name}
             description="A collection of Redux-related addons, libraries, and utilities."
             canonical={consts.canonicalURL + router.asPath}
+            categories={overview}
         >
-            <CardList key={category.slug} category={category} />
+            <CardList key={detailed.slug} category={detailed} />
         </Layout>
     )
 }
 
-Subcategory.getInitialProps = async ({}) => {
-    const r = await fetch(`${consts.apiURL}/database.json`)
-    const data: SubcategoryProps['data'] = await r.json()
-    return { data }
+Subcategory.getInitialProps = async ({ asPath }) => {
+    const categorySlug = asPath.split('/')[2]
+    const r = await fetch(`${consts.apiURL}/api/overview`)
+    const { overview } = await r.json()
+    const r2 = await fetch(`${consts.apiURL}/api/single-category?categorySlug=${categorySlug}`)
+    const { detailed } = await r2.json()
+    return { overview, detailed }
 }
 
 export default Subcategory

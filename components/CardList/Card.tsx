@@ -1,7 +1,6 @@
 /** @format */
 
 import React from 'react'
-import { NextPage } from 'next'
 
 import { Icon } from './Icon'
 import styles from './Card.module.css'
@@ -12,7 +11,7 @@ interface CardProps {
     repo: TRepository
 }
 
-const Card: NextPage<CardProps> = ({ repo }) => {
+const Card: React.FC<CardProps> = ({ repo }) => {
     const {
         npmDownloadsThisMonth: downloads,
         githubLastUpdate: date,
@@ -31,7 +30,7 @@ const Card: NextPage<CardProps> = ({ repo }) => {
                     className={styles.link}
                     target="_blank"
                     rel="noreferrer noopener"
-                    href={githubURL}
+                    href={githubURL || altURLs[0]}
                 >
                     <div className={styles.header}>{name}</div>
                     <div className={styles.separator} />

@@ -219,6 +219,7 @@ async function main() {
                         repo.githubStars = githubData.stargazers_count
                         repo.githubLastUpdate = githubData.updated_at.split('T')[0]
                         repo.githubLastPush = githubData.pushed_at.split('T')[0]
+                        repo.isArchived = githubData.archived
     
                         repo.npmDownloadsThisMonth = await new Promise((resolve) => {
                             getNPMStats.lastMonth(repoName, (err, results) =>
@@ -251,5 +252,5 @@ async function main() {
 
     if (fs.existsSync(errorsLocation)) fs.truncateSync(errorsLocation, 0)
     fs.writeFileSync(errorsLocation, JSON.stringify({ errors, asyncErrors }, null, 2))
-    console.log('Saved data to file')
+    console.log(`Saved data to file: ${databaseLocation}`)
 }

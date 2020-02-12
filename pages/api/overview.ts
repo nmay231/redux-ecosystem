@@ -13,8 +13,8 @@ const preview: TCategoryPreview[] = (database.categories as TCategory[]).map((ca
     })),
 }))
 
-const topics: Middleware<{ categories: TCategoryPreview[] }> = (req, res) => {
-    res.json({ categories: preview })
+const overview: Middleware<{ overview: TCategoryPreview[] }> = (req, res) => {
+    res.json({ overview: preview })
 }
 
-export default topics
+export default overview
