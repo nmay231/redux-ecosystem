@@ -1,37 +1,31 @@
 /** @format */
 
 import React from 'react'
+import { connect, ConnectedProps } from 'react-redux'
 import { NextPage } from 'next'
-import fetch from '../../utils/fetch'
 
 import CategoryPreview from '../../components/Utils/CategoryPreview'
 import Layout from '../../components/Layout'
 import consts from '../../utils/consts'
-import { TCategoryPreview } from '../../typing'
+import { ReduxState } from '../../typing'
 
-interface RootProps {
-    categories: TCategoryPreview[]
-}
-
-const TopicRoot: NextPage<RootProps> = ({ categories }) => {
+const TopicRoot: NextPage<ConnectedProps<typeof connectToRedux>> = ({ overview }) => {
     return (
         <Layout
             title="Redux Ecosystem | Topics"
             canonical={consts.canonicalURL}
             description="A list of all the different topics in the redux ecosystem"
-            categories={categories}
+            categories={overview}
         >
-            {categories.map((cat) => (
+            {overview.map((cat) => (
                 <CategoryPreview key={cat.slug} {...cat} />
             ))}
         </Layout>
     )
 }
 
-TopicRoot.getInitialProps = async ({}) => {
-    const r = await fetch('/api/overview')
-    const { overview } = await r.json()
-    return { categories: overview }
-}
+const connectToRedux = connect((state: ReduxState) => ({
+    overview: state.overview,
+}))
 
-export default TopicRoot
+export default connectToRedux(TopicRoot)

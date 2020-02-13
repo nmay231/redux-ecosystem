@@ -31,12 +31,9 @@ const Root: NextPage<Stupid, RootProps> = ({ overview, repositories }) => {
     )
 }
 
-Root.getInitialProps = async ({}) => {
-    const r = await fetch(`/api/overview`)
-    const { overview } = await r.json()
-    return { overview }
-}
-
-const connectToRedux = connect((state: ReduxState) => ({ repositories: state.rawRepositories }))
+const connectToRedux = connect((state: ReduxState) => ({
+    repositories: state.rawRepositories,
+    overview: state.overview,
+}))
 
 export default connectToRedux(Root)

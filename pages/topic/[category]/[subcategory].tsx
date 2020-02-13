@@ -3,20 +3,22 @@
 import React, { useMemo } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import fetch from '../../../utils/fetch'
+import { connect, ConnectedProps } from 'react-redux'
 
 import Layout from '../../../components/Layout'
 import CardList from '../../../components/CardList'
 
+import fetch from '../../../utils/fetch'
 import consts from '../../../utils/consts'
-import { TCategory, TCategoryPreview } from '../../../typing'
+import { TCategory, ReduxState } from '../../../typing'
 
-interface SubcategoryProps {
-    overview: TCategoryPreview[]
+interface GetInitialProps {
     detailed: TCategory // TODO: detailed is an undescriptive name, please change the server api response...
 }
 
-const Subcategory: NextPage<SubcategoryProps> = ({ overview, detailed }) => {
+type MergedProps = ConnectedProps<typeof connectToRedux> & GetInitialProps
+
+const Subcategory: NextPage<MergedProps, GetInitialProps> = ({ overview, detailed }) => {
     const router = useRouter()
     // TODO: make this more resilient to change please...
     const subcategorySlug = router.asPath.split('/')[3]
@@ -44,11 +46,13 @@ const Subcategory: NextPage<SubcategoryProps> = ({ overview, detailed }) => {
 
 Subcategory.getInitialProps = async ({ asPath }) => {
     const categorySlug = asPath.split('/')[2]
-    const r = await fetch('/api/overview')
-    const { overview } = await r.json()
     const r2 = await fetch(`/api/single-category?categorySlug=${categorySlug}`)
     const { detailed } = await r2.json()
-    return { overview, detailed }
+    return { detailed }
 }
 
-export default Subcategory
+const connectToRedux = connect((state: ReduxState) => ({
+    overview: state.overview,
+}))
+
+export default connectToRedux(Subcategory)

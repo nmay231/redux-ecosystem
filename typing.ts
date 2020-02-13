@@ -37,8 +37,9 @@ export interface TRepositoryFlat {
 }
 
 export type ReduxState = {
-    foo: string
     rawRepositories: TRepositoryFlat[]
+    overview: TCategoryPreview[]
+    topic?: TCategory
 }
 
 export type Middleware<D = any> = (req: NextApiRequest, res: NextApiResponse<D>) => any

@@ -5,26 +5,29 @@ import { Reducer, createStore } from 'redux'
 import { MakeStore } from 'next-redux-wrapper'
 
 const initialState: ReduxState = {
-    foo: 'string',
     rawRepositories: [],
+    overview: [],
+    topic: undefined,
 }
 
 const reducer: Reducer<ReduxState> = (state: ReduxState = initialState, action) => {
     switch (action.type) {
-        case 'FOO':
-            return { ...state, foo: action.payload }
         case 'INITIAL_DATA':
-            return { ...state, rawRepositories: action.all }
+            return { ...state, rawRepositories: action.all, overview: action.overview }
         default:
             return state
     }
 }
 
-export const initialData = (all: ReduxState['rawRepositories']) => ({
+export const initialData = (
+    all: ReduxState['rawRepositories'],
+    overview?: ReduxState['overview'],
+) => ({
     type: 'INITIAL_DATA',
-    all: all,
+    all,
+    overview,
 })
 
-export const makeStore: MakeStore = (initialState_ = initialState, options) => {
+export const makeStore: MakeStore = (initialState_ = initialState) => {
     return createStore(reducer, initialState_)
 }

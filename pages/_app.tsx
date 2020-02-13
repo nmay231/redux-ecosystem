@@ -7,13 +7,17 @@ import withRedux, { AppProps, NextJSAppContext } from 'next-redux-wrapper'
 import '../scss/custom.css'
 import fetch from '../utils/fetch'
 import { makeStore, initialData } from '../utils/redux'
-import { TRepositoryFlat } from '../typing'
+import { TRepositoryFlat, TCategoryPreview } from '../typing'
 
 class App extends NextApp<AppProps> {
     static async getInitialProps({ Component, ctx }: NextJSAppContext) {
         const r = await fetch('/api/all')
         const { all }: { all: TRepositoryFlat[] } = await r.json()
-        ctx.store.dispatch(initialData(all))
+
+        const r2 = await fetch('/api/overview')
+        const { overview }: { overview: TCategoryPreview[] } = await r2.json()
+
+        ctx.store.dispatch(initialData(all, overview))
 
         const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
 
