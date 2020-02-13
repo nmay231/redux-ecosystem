@@ -32,6 +32,7 @@ const CategoryDropdown: React.FC<CategoryProps> = ({ category }) => {
                     <div>
                         <SubcategoryDropdown
                             name={allSubcategories.name}
+                            isAll
                             slug={`${category.slug}`}
                             repoCount={totalRepoCount}
                         />
