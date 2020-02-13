@@ -24,6 +24,23 @@ export interface TRepository {
     npmDownloadsThisMonth: number
 }
 
+export interface TRepositoryFlat {
+    category: Pick<TCategory, 'name' | 'slug'>
+    subcategory: Pick<TSubcategory, 'name' | 'slug'>
+    name: string
+    description: string
+    githubURL: string
+    githubLastUpdate: string
+    githubStars: number
+    altURLs: string[]
+    npmDownloadsThisMonth: number
+}
+
+export type ReduxState = {
+    foo: string
+    rawRepositories: TRepositoryFlat[]
+}
+
 export type Middleware<D = any> = (req: NextApiRequest, res: NextApiResponse<D>) => any
 
 export interface TCategoryPreview {
