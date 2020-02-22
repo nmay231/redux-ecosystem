@@ -13,7 +13,7 @@
         "build:next": "next build",
         "build:scss": "node-sass scss/custom.scss scss/custom.css",
         "start": "next start",
-        "fetch-data": "node robot/scraper.js",
+        "robot": "node robot/scraper.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "license": "MIT",

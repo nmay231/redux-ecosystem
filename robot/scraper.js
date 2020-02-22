@@ -13,9 +13,13 @@ const { githubAPIKey } = require('../utils/consts')
 const databaseLocation = path.resolve(__dirname, '../public/database.json')
 const errorsLocation = path.resolve(__dirname, 'errors.json')
 const repoLocation = path.resolve(__dirname, 'links')
-const fileBlacklist = { '.git': '', '.github': '', 'README.md': '' }
+const fileBlacklist = ['.git', '.github', 'README.md']
 
-const slugify = (str) => str.toLowerCase().replace(/( ?- ?)|\/| /g, '-')
+const slugify = (str) =>
+    str
+        .toLowerCase()
+        .replace(/( ?- ?)|\/| /g, '-')
+        .replace(/\(|\)/g, '')
 const fetchJSON = async (uri) =>
     fetch(uri, { headers: { Authorization: 'token ' + githubAPIKey } }).then((r) => r.json())
 
@@ -47,7 +51,7 @@ const final = []
 const errors = []
 
 for (let fileName of fs.readdirSync(repoLocation)) {
-    if (fileName in fileBlacklist) continue
+    if (fileBlacklist.indexOf(fileName) > -1) continue
     progress.text = fileName
     const fileContents = fs.readFileSync(path.resolve(repoLocation, fileName), {
         encoding: 'utf-8',
@@ -167,8 +171,6 @@ for (let fileName of fs.readdirSync(repoLocation)) {
                 ;[repository.githubURL, repository.altURLs] = findGithubUrl(repository.altURLs)
 
                 subcategory.repositories.push(repository)
-                // if (repository.name === 'redux-thunk')
-                //     console.log(JSON.stringify(paragraph, null, 4))
             }
         }
     }
@@ -184,64 +186,112 @@ progress.succeed(
     Found ${totalCount} total repositories/projects.`,
 )
 
-// I do this because I don't like IIFEs
+const makeGithubQuery = (owner, name) => `
+    repository(name: "${name}", owner: "${owner}") {
+        name
+        stargazers {
+            totalCount
+        }
+        isArchived
+        pushedAt
+        url
+        releases(last: 1) {
+            nodes {
+                createdAt
+            }
+        }
+    }
+`
+
+const batchGithubRequest = async (projects) => {
+    const queries = projects.map((project) => {
+        if (!project.githubURL) return ''
+        const [, , , repoOwner, repoName, ...stuff] = project.githubURL.split('/')
+        return makeGithubQuery(repoOwner, repoName)
+    })
+
+    const masterQuery = `query { ${queries.map((q, i) => `repo${i}: ${q}`).join(' ')} }`
+    const r = await fetch('https://api.github.com/graphql', {
+        method: 'POST',
+        headers: {
+            Authorization: 'bearer ' + githubAPIKey,
+        },
+        body: JSON.stringify({ query: masterQuery }),
+    })
+    const { data, errors } = await r.json()
+    if (!data) {
+        return { projects, errors }
+    }
+    projects = projects.map((project, index) => {
+        const repo = data['repo' + index] || {}
+        const lastRelease = repo.releases && repo.releases[0] && repo.releases[0].createdAt
+
+        return {
+            name: repo.name || project.name,
+            description: project.description,
+            githubURL: repo.url || project.url,
+            altURLs: (progress.altURLs || []).join(';;;'),
+            githubStars: repo.stargazers && repo.stargazers.totalCount,
+            lastRelease,
+            npmDownloadsThisMonth: project.npmDownloadsThisMonth,
+        }
+    })
+
+    return { projects, errors }
+}
+
 main()
 
 async function main() {
-    const asyncErrors = []
+    let asyncErrors = []
     const catCount = final.length
     for (let currentCategory in final) {
         const category = final[currentCategory]
 
-        let completed = 0
         const totalCount = category.subcategories.reduce(
             (subCount, sub) => subCount + sub.repositories.length,
             0,
         )
 
         const progress = ora('').start()
-        const updateProgress = (currentRepo) => {
-            progress.text =
-                `${category.slug}(${currentCategory + 1}/${catCount}): ` +
-                `${completed}/${totalCount} ${currentRepo}`
-        }
-        updateProgress('Starting category...')
 
-        /* prettier-ignore */
-        await Promise.all(category.subcategories.map((subcat) => new Promise(async (resolve) => {
-            await Promise.all(subcat.repositories.map((repo) => new Promise(async (resolve) => {
-                try {
-                    if (repo.githubURL) {
-                        const [https, _, githubDotCom, repoOwner, repoName, ...stuff] = repo.githubURL.split('/')
-                        const githubRepoURL = `https://api.github.com/repos/${repoOwner}/${repoName}`
-    
-                        const githubData = await fetchJSON(githubRepoURL)
-                        repo.githubStars = githubData.stargazers_count
-                        repo.githubLastUpdate = githubData.updated_at.split('T')[0]
-                        repo.githubLastPush = githubData.pushed_at.split('T')[0]
-                        repo.isArchived = githubData.archived
-    
-                        repo.npmDownloadsThisMonth = await new Promise((resolve) => {
-                            getNPMStats.lastMonth(repoName, (err, results) =>
-                                resolve(err ? 0 : results.downloads)
+        for (let index in category.subcategories) {
+            const length = category.subcategories.length
+            const subcategory = category.subcategories[index]
+
+            progress.text =
+                `(${currentCategory - -1}/${catCount}) ${category.slug} -` +
+                ` ${index - -1}/${length} ${subcategory.name}`
+            try {
+                const { projects, errors } = await batchGithubRequest(subcategory.repositories)
+
+                asyncErrors = asyncErrors.concat(errors || [])
+
+                subcategory.repositories = await Promise.all(
+                    projects.map(async (project) => {
+                        const npmDownloadsThisMonth = await new Promise((resolve) => {
+                            getNPMStats.lastMonth(project.name, (err, results) =>
+                                resolve(err ? 0 : results.downloads),
                             )
                         })
-    
-                        updateProgress(repoName)
-                        completed++
-                    }
-                } catch (err) {
-                    asyncErrors.push({
-                        githubURL: repo.githubURL,
-                        err
-                    })
-                }
-                resolve()
-            })))
-            resolve()
-        })))
 
-        progress.succeed(`Completed ${category.slug}: ${totalCount}/${totalCount}`)
+                        return {
+                            ...project,
+                            npmDownloadsThisMonth,
+                        }
+                    }),
+                )
+            } catch (err) {
+                asyncErrors.push({
+                    where: category.slug + '/' + subcategory.slug,
+                    err: err.toString(),
+                })
+            }
+        }
+
+        progress.succeed(
+            `(${currentCategory - -1}) ${category.slug} completed: ${totalCount}/${totalCount} projects`,
+        )
     }
 
     if (fs.existsSync(databaseLocation)) fs.truncateSync(databaseLocation, 0)
@@ -252,5 +302,6 @@ async function main() {
 
     if (fs.existsSync(errorsLocation)) fs.truncateSync(errorsLocation, 0)
     fs.writeFileSync(errorsLocation, JSON.stringify({ errors, asyncErrors }, null, 2))
+    console.log(`${asyncErrors.length} errors fetching data`)
     console.log(`Saved data to file: ${databaseLocation}`)
 }
