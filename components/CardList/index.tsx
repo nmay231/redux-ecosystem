@@ -17,7 +17,7 @@ const CardList: React.FC<CardListProps> = ({ category }) => {
                 <div key={sub.slug} className="mt-2 mb-4">
                     <h2 className="ml-3">{sub.name}</h2>
                     <div className="row">
-                        {sub.repositories.map((repo) => (
+                        {sub.projects.map((repo) => (
                             <Card key={repo.name} repo={repo} />
                         ))}
                     </div>

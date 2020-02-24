@@ -67,7 +67,7 @@ for (let fileName of fs.readdirSync(repoLocation)) {
     let subcategory = {
         name: null,
         slug: null,
-        repositories: [],
+        projects: [],
     }
 
     for (let child of ast.children) {
@@ -102,7 +102,7 @@ for (let fileName of fs.readdirSync(repoLocation)) {
             subcategory = {
                 name: header,
                 slug: slugify(header),
-                repositories: [],
+                projects: [],
             }
             category.subcategories.push(subcategory)
         }
@@ -131,13 +131,13 @@ for (let fileName of fs.readdirSync(repoLocation)) {
                 subcategory = {
                     name: null,
                     slug: null,
-                    repositories: [],
+                    projects: [],
                 }
                 category.subcategories.push(subcategory)
             }
 
             for (let listItem of child.children) {
-                const repository = {
+                const project = {
                     name: '',
                     description: '',
                     githubURL: null,
@@ -146,32 +146,32 @@ for (let fileName of fs.readdirSync(repoLocation)) {
 
                 for (let content of listItem.children[0].children) {
                     // Project title
-                    if (content.type === 'strong' && !repository.name) {
-                        repository.name = content.children[0].value
+                    if (content.type === 'strong' && !project.name) {
+                        project.name = content.children[0].value
                         continue
                     }
 
                     // Project link(s)
-                    if (content.type === 'link' && !repository.description) {
-                        repository.altURLs.push(content.url)
+                    if (content.type === 'link' && !project.description) {
+                        project.altURLs.push(content.url)
                         continue
                     }
 
                     // Project description
                     if (content.type === 'text' || content.type === 'inlineCode') {
-                        repository.description += content.value
+                        project.description += content.value
                     } else if (
                         content.type === 'link' ||
                         content.type === 'strong' ||
                         content.type === 'emphasis'
                     ) {
-                        repository.description += content.children[0].value
+                        project.description += content.children[0].value
                     }
                 }
 
-                ;[repository.githubURL, repository.altURLs] = findGithubUrl(repository.altURLs)
+                ;[project.githubURL, project.altURLs] = findGithubUrl(project.altURLs)
 
-                subcategory.repositories.push(repository)
+                subcategory.projects.push(project)
             }
         }
     }
@@ -179,16 +179,16 @@ for (let fileName of fs.readdirSync(repoLocation)) {
 
 const totalCount = final.reduce(
     (count, cat) =>
-        count + cat.subcategories.reduce((subCount, sub) => subCount + sub.repositories.length, 0),
+        count + cat.subcategories.reduce((subCount, sub) => subCount + sub.projects.length, 0),
     0,
 )
 progress.succeed(
     `Parsed files with ${parsingErrors.length} warnings.
-  Found ${totalCount} total repositories/projects.`,
+  Found ${totalCount} total projects/projects.`,
 )
 
 const makeGithubQuery = (owner, name) => `
-    repository(name: "${name}", owner: "${owner}") {
+    project(name: "${name}", owner: "${owner}") {
         name
         stargazers {
             totalCount
@@ -253,7 +253,7 @@ async function main() {
         const category = final[currentCategory]
 
         const totalCount = category.subcategories.reduce(
-            (subCount, sub) => subCount + sub.repositories.length,
+            (subCount, sub) => subCount + sub.projects.length,
             0,
         )
 
@@ -267,12 +267,12 @@ async function main() {
                 `(${parseInt(currentCategory) + 1}/${catCount}) ${category.slug} -` +
                 ` ${parseInt(index) + 1}/${length} ${subcategory.slug}`
             try {
-                const { projects, errors } = await batchGithubRequest(subcategory.repositories)
+                const { projects, errors } = await batchGithubRequest(subcategory.projects)
 
                 if (errors)
                     asyncErrors.push({ where: `${category.slug}/${subcategory.slug}`, errors })
 
-                subcategory.repositories = await Promise.all(
+                subcategory.projects = await Promise.all(
                     projects.map(async (project) => {
                         const npmDownloadsThisMonth = await new Promise((resolve) => {
                             getNPMStats.lastMonth(project.name, (err, results) =>
@@ -361,7 +361,7 @@ async function main() {
                 where: { slug: subcategory.slug },
                 attributes: ['id'],
             })
-            for (let project of subcategory.repositories) {
+            for (let project of subcategory.projects) {
                 const altURLs =
                     typeof project.altURLs === 'string'
                         ? project.altURLs

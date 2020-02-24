@@ -14,7 +14,7 @@ interface RootProps {
     overview: TCategoryPreview[]
 }
 type Stupid = ConnectedProps<typeof connectToRedux> & RootProps
-const Root: NextPage<Stupid, RootProps> = ({ overview, repositories }) => {
+const Root: NextPage<Stupid, RootProps> = ({ overview, projects }) => {
     return (
         <Layout
             title="Redux Ecosystem | Home page"
@@ -23,7 +23,7 @@ const Root: NextPage<Stupid, RootProps> = ({ overview, repositories }) => {
             categories={overview}
         >
             {/* Useful for testing */}
-            {/* <p>{JSON.stringify(repositories[1])}</p> */}
+            {/* <p>{JSON.stringify(projects[1])}</p> */}
             {overview.map((cat) => (
                 <CategoryPreview key={cat.slug} {...cat} />
             ))}
@@ -32,7 +32,7 @@ const Root: NextPage<Stupid, RootProps> = ({ overview, repositories }) => {
 }
 
 const connectToRedux = connect((state: ReduxState) => ({
-    repositories: state.rawRepositories,
+    projects: state.rawProjects,
     overview: state.overview,
 }))
 

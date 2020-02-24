@@ -5,7 +5,7 @@ import { Reducer, createStore } from 'redux'
 import { MakeStore } from 'next-redux-wrapper'
 
 const initialState: ReduxState = {
-    rawRepositories: [],
+    rawProjects: [],
     overview: [],
     topic: undefined,
 }
@@ -13,16 +13,13 @@ const initialState: ReduxState = {
 const reducer: Reducer<ReduxState> = (state: ReduxState = initialState, action) => {
     switch (action.type) {
         case 'INITIAL_DATA':
-            return { ...state, rawRepositories: action.all, overview: action.overview }
+            return { ...state, rawProjects: action.all, overview: action.overview }
         default:
             return state
     }
 }
 
-export const initialData = (
-    all: ReduxState['rawRepositories'],
-    overview?: ReduxState['overview'],
-) => ({
+export const initialData = (all: ReduxState['rawProjects'], overview?: ReduxState['overview']) => ({
     type: 'INITIAL_DATA',
     all,
     overview,

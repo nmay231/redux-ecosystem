@@ -11,10 +11,10 @@ export interface TCategory {
 export interface TSubcategory {
     name: string
     slug: string
-    repositories: TRepository[]
+    projects: TProject[]
 }
 
-export interface TRepository {
+export interface TProject {
     name: string
     description: string
     githubURL: string
@@ -24,7 +24,7 @@ export interface TRepository {
     npmDownloadsThisMonth: number
 }
 
-export interface TRepositoryFlat {
+export interface TProjectFlat {
     category: Pick<TCategory, 'name' | 'slug'>
     subcategory: Pick<TSubcategory, 'name' | 'slug'>
     name: string
@@ -37,7 +37,7 @@ export interface TRepositoryFlat {
 }
 
 export type ReduxState = {
-    rawRepositories: TRepositoryFlat[]
+    rawProjects: TProjectFlat[]
     overview: TCategoryPreview[]
     topic?: TCategory
 }

@@ -5,10 +5,10 @@ import React from 'react'
 import { Icon } from './Icon'
 import styles from './Card.module.css'
 import { cropText, formatNumber } from '../../utils'
-import { TRepository } from '../../typing'
+import { TProject } from '../../typing'
 
 interface CardProps {
-    repo: TRepository
+    repo: TProject
 }
 
 const Card: React.FC<CardProps> = ({ repo }) => {
