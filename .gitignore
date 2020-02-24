@@ -41,7 +41,7 @@ jspm_packages/
 
 # Project specific
 .vscode/
-database.json
+database.sqlite
 scss/custom.css
 utils/consts.js
 robot/links
