@@ -20,7 +20,7 @@ type MergedProps = ConnectedProps<typeof connectToRedux> & GetInitialProps
 
 const Subcategory: NextPage<MergedProps, GetInitialProps> = ({ overview, singleCategory }) => {
     const router = useRouter()
-    const subcategorySlug = router.asPath.split('/')[3]
+    const { subcategory: subcategorySlug } = router.query as { subcategory: string }
 
     singleCategory = useMemo(() => {
         const subcategory = singleCategory.subcategories.find((sub) => sub.slug === subcategorySlug)
