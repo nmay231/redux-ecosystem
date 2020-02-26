@@ -3,18 +3,13 @@
 import React from 'react'
 import { connect, ConnectedProps } from 'react-redux'
 import { NextPage } from 'next'
-import fetch from '../utils/fetch'
 
-import CategoryPreview from '../components/Utils/CategoryPreview'
-import Layout from '../components/Layout'
-import consts from '../utils/consts'
-import { TCategoryPreview, ReduxState } from '../typing'
+import CategoryPreview from '~/components/Utils/CategoryPreview'
+import Layout from '~/components/Layout'
+import consts from '~/utils/consts'
+import { ReduxState } from '~/typing'
 
-interface RootProps {
-    overview: TCategoryPreview[]
-}
-type Stupid = ConnectedProps<typeof connectToRedux> & RootProps
-const Root: NextPage<Stupid, RootProps> = ({ overview, projects }) => {
+const Root: NextPage<ConnectedProps<typeof connectToRedux>> = ({ overview }) => {
     return (
         <Layout
             title="Redux Ecosystem | Home page"
@@ -22,8 +17,6 @@ const Root: NextPage<Stupid, RootProps> = ({ overview, projects }) => {
             description="The Redux Ecosystem home page"
             categories={overview}
         >
-            {/* Useful for testing */}
-            {/* <p>{JSON.stringify(projects[1])}</p> */}
             {overview.map((cat) => (
                 <CategoryPreview key={cat.slug} {...cat} />
             ))}

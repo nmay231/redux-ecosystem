@@ -2,8 +2,8 @@
 
 import sequelize from 'sequelize'
 
-import { Middleware, TCategoryPreview } from '../../typing'
-import { Category, Subcategory, Project } from '../../utils/db'
+import { Middleware, TCategoryPreview } from '~/typing'
+import { Category, Subcategory, Project } from '~/utils/db'
 
 const overview: Middleware<{ overview: TCategoryPreview[] }> = async (req, res) => {
     const overview = await Category.findAll({

@@ -4,10 +4,10 @@ import React from 'react'
 import { connect, ConnectedProps } from 'react-redux'
 import { NextPage } from 'next'
 
-import CategoryPreview from '../../components/Utils/CategoryPreview'
-import Layout from '../../components/Layout'
-import consts from '../../utils/consts'
-import { ReduxState } from '../../typing'
+import CategoryPreview from '~/components/Utils/CategoryPreview'
+import Layout from '~/components/Layout'
+import consts from '~/utils/consts'
+import { ReduxState } from '~/typing'
 
 const TopicRoot: NextPage<ConnectedProps<typeof connectToRedux>> = ({ overview }) => {
     return (

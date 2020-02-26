@@ -4,10 +4,10 @@ import NextApp from 'next/app'
 import { Provider } from 'react-redux'
 import withRedux, { AppProps, NextJSAppContext } from 'next-redux-wrapper'
 
-import '../scss/custom.css'
-import fetch from '../utils/fetch'
-import { makeStore, initialData } from '../utils/redux'
-import { TProjectFlat, TCategoryPreview } from '../typing'
+import '~/scss/custom.css'
+import fetch from '~/utils/fetch'
+import { makeStore, initialData } from '~/utils/redux'
+import { TProjectFlat, TCategoryPreview } from '~/typing'
 
 class App extends NextApp<AppProps> {
     static async getInitialProps({ Component, ctx }: NextJSAppContext) {

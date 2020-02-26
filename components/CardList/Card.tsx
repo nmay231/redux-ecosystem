@@ -5,9 +5,9 @@ import React from 'react'
 import { Icon } from './Icon'
 import styles from './Card.module.css'
 
-import { TProject } from '../../typing'
-import { cropText, formatNumber } from '../../utils'
-import consts from '../../utils/consts'
+import { TProject } from '~/typing'
+import { cropText, formatNumber } from '~/utils'
+import consts from '~/utils/consts'
 
 interface CardProps {
     repo: TProject

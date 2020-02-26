@@ -5,12 +5,12 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { connect, ConnectedProps } from 'react-redux'
 
-import Layout from '../../../components/Layout'
-import CardList from '../../../components/CardList'
+import Layout from '~/components/Layout'
+import CardList from '~/components/CardList'
 
-import fetch from '../../../utils/fetch'
-import consts from '../../../utils/consts'
-import { TCategory, ReduxState } from '../../../typing'
+import fetch from '~/utils/fetch'
+import consts from '~/utils/consts'
+import { TCategory, ReduxState } from '~/typing'
 
 interface GetInitialProps {
     singleCategory: TCategory

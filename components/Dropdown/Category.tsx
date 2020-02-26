@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import styles from './Category.module.css'
-import { TCategoryPreview } from '../../typing'
+import { TCategoryPreview } from '~/typing'
 import SubcategoryDropdown from './Subcategory'
 
 interface CategoryProps {

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import Category from './Category'
 import styles from './index.module.css'
-import { TCategoryPreview } from '../../typing'
+import { TCategoryPreview } from '~/typing'
 
 interface DropdownProps {
     categories: TCategoryPreview[]

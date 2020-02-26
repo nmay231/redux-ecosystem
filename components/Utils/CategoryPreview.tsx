@@ -4,7 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 
 import styles from './CategoryPreview.module.css'
-import { TSubcategory } from '../../typing'
+import { TSubcategory } from '~/typing'
 
 interface CategoryPreviewProps {
     name: string

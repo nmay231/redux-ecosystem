@@ -1,6 +1,6 @@
 /** @format */
 
-import { ReduxState } from '../../typing'
+import { ReduxState } from '~/typing'
 import { Reducer, createStore } from 'redux'
 import { MakeStore } from 'next-redux-wrapper'
 

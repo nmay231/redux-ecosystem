@@ -3,7 +3,7 @@
 import React from 'react'
 
 import Card from './Card'
-import { TCategory } from '../../typing'
+import { TCategory } from '~/typing'
 
 interface CardListProps {
     category: TCategory

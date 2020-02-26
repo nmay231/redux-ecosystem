@@ -1,8 +1,8 @@
 /** @format */
 
-import { Middleware, TProjectFlat } from '../../typing'
+import { Middleware, TProjectFlat } from '~/typing'
 
-import { Project, Category, Subcategory } from '../../utils/db'
+import { Project, Category, Subcategory } from '~/utils/db'
 
 const topics: Middleware<{ all: TProjectFlat[] }> = async (req, res) => {
     const all = await Project.findAll({
