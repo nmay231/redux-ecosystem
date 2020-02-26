@@ -2,13 +2,40 @@
 
 import { Middleware, TCategory } from '../../typing'
 
-import database from '../../public/database.json'
+import { Category, Subcategory, Project } from '../../utils/db'
 
-const categories: TCategory[] = database.categories
-
-const detailed: Middleware<{ detailed: TCategory }> = (req, res) => {
+const singleCategory: Middleware<{ singleCategory: TCategory }> = async (req, res) => {
     const { categorySlug } = req.query
-    res.json({ detailed: categories.find((cat) => cat.slug === categorySlug) })
+
+    if (!categorySlug) {
+        return res.json({ singleCategory: null })
+    }
+
+    const singleCategory = await Category.findOne({
+        where: { slug: categorySlug },
+        attributes: ['name', 'slug'],
+        include: [
+            {
+                model: Subcategory,
+                attributes: ['name', 'slug'],
+                include: [
+                    {
+                        model: Project,
+                        attributes: {
+                            exclude: [
+                                'id',
+                                'createdAt',
+                                'updatedAt',
+                                'categoryId',
+                                'subcategoryId',
+                            ],
+                        },
+                    },
+                ],
+            },
+        ],
+    })
+    res.json({ singleCategory })
 }
 
-export default detailed
+export default singleCategory

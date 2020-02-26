@@ -18,9 +18,11 @@ export interface TProject {
     name: string
     description: string
     githubURL: string
-    githubLastUpdate: string
+    altURLs: string
     githubStars: number
-    altURLs: string[]
+    githubLastRelease: string
+    githubLastPush: string
+    githubIsArchived: boolean
     npmDownloadsThisMonth: number
 }
 

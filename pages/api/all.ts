@@ -1,31 +1,26 @@
 /** @format */
 
-import { Middleware, TCategory, TRepositoryFlat } from '../../typing'
+import { Middleware, TProjectFlat } from '../../typing'
 
-import database from '../../public/database.json'
+import { Project, Category, Subcategory } from '../../utils/db'
 
-const categories = database.categories as TCategory[]
-
-const all: TRepositoryFlat[] = categories.reduce(
-    (prev, cat) => [
-        ...prev,
-        ...cat.subcategories.reduce(
-            (prev, sub) => [
-                ...prev,
-                ...sub.repositories.map((repo) => ({
-                    ...repo,
-                    category: { name: cat.name, slug: cat.slug },
-                    subcategory: { name: sub.name, slug: sub.slug },
-                })),
-            ],
-            [] as TRepositoryFlat[],
-        ),
-    ],
-    [] as TRepositoryFlat[],
-)
-
-const topics: Middleware<{ all: TRepositoryFlat[] }> = (req, res) => {
-    res.json({ all })
+const topics: Middleware<{ all: TProjectFlat[] }> = async (req, res) => {
+    const all = await Project.findAll({
+        attributes: { exclude: ['id', 'createdAt', 'updatedAt', 'categoryId', 'subcategoryId'] },
+        include: [
+            {
+                model: Subcategory,
+                attributes: ['name', 'slug'],
+            },
+            {
+                model: Category,
+                attributes: ['name', 'slug'],
+            },
+        ],
+    })
+    res.json({
+        all,
+    })
 }
 
 export default topics

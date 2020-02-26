@@ -10,19 +10,12 @@ const sequelize = require('sequelize')
 const { get: getNPMStats } = require('download-stats')
 const { parse: parseMarkdown } = require('remark')
 
-const { githubAPIKey } = require('../utils/consts')
+const { githubAPIKey, urlListSeparator } = require('../utils/consts')
 const errorsLocation = path.resolve(__dirname, 'errors.json')
 const repoLocation = path.resolve(__dirname, 'links')
 const fileBlacklist = ['.git', '.github', 'README.md']
 
-const slugify = (str) =>
-    str
-        .toLowerCase()
-        .replace(/( ?- ?)|\/| /g, '-')
-        .replace(/[^-\w]/g, '')
-
-const fetchJSON = async (uri) =>
-    fetch(uri, { headers: { Authorization: 'token ' + githubAPIKey } }).then((r) => r.json())
+const slugify = (str) => str.toLowerCase().replace(/[^\w]+/g, '-')
 
 const githubURLRegex = /^https:\/\/(www.)?github.com\/[^\s]+\/[^\s]+$/
 const findGithubUrl = (urls) => {
@@ -188,7 +181,7 @@ progress.succeed(
 )
 
 const makeGithubQuery = (owner, name) => `
-    project(name: "${name}", owner: "${owner}") {
+    repository(name: "${name}", owner: "${owner}") {
         name
         stargazers {
             totalCount
@@ -219,13 +212,15 @@ const batchGithubRequest = async (projects) => {
         },
         body: JSON.stringify({ query: masterQuery }),
     })
+
     const { data, errors } = await r.json()
     if (!data) {
         return { projects, errors }
     }
+
     projects = projects.map((project, index) => {
         const repo = data['repo' + index] || {}
-        const lastRelease = repo.releases && repo.releases[0] && repo.releases[0].createdAt
+        const githubLastRelease = repo.releases && repo.releases[0] && repo.releases[0].createdAt
 
         return {
             name: repo.name || project.name,
@@ -233,7 +228,9 @@ const batchGithubRequest = async (projects) => {
             githubURL: repo.url || project.url,
             altURLs: project.altURLs || [],
             githubStars: repo.stargazers && repo.stargazers.totalCount,
-            lastRelease,
+            githubLastRelease,
+            githubIsArchived: repo.isArchived,
+            githubLastPush: repo.pushedAt,
             npmDownloadsThisMonth: project.npmDownloadsThisMonth,
         }
     })
@@ -317,14 +314,10 @@ async function main() {
     const Subcategory = db.define('subcategory', {
         name: sequelize.TEXT,
         slug: sequelize.TEXT,
-        categoryId: {
-            type: sequelize.INTEGER,
-            references: {
-                model: Category,
-                key: 'id',
-            },
-        },
     })
+    // setup many-to-one relationship
+    Category.hasMany(Subcategory)
+    Subcategory.belongsTo(Category)
 
     const Project = db.define('project', {
         name: sequelize.TEXT,
@@ -332,50 +325,44 @@ async function main() {
         githubURL: sequelize.TEXT,
         altURLs: sequelize.TEXT,
         githubStars: sequelize.INTEGER,
-        githubLastUpdate: sequelize.DATEONLY,
+        githubLastRelease: sequelize.DATEONLY,
         githubLastPush: sequelize.DATEONLY,
+        githubIsArchived: sequelize.BOOLEAN,
         npmDownloadsThisMonth: sequelize.INTEGER,
-        categoryId: {
-            type: sequelize.INTEGER,
-            references: {
-                model: Subcategory,
-                key: 'id',
-            },
-        },
     })
+    Category.hasMany(Project)
+    Subcategory.hasMany(Project)
+    Project.belongsTo(Category)
+    Project.belongsTo(Subcategory)
 
-    // Create new tables
+    // Drop old tables and create new ones
     await db.sync({ force: true })
 
     for (let category of final) {
-        Category.create(category)
-        Category.sync()
-        const { id: categoryId } = await Category.findOne({
-            where: { slug: category.slug },
-            attributes: ['id'],
-        })
-        for (let subcategory of category.subcategories) {
-            Subcategory.create({ ...subcategory, categoryId })
-            Subcategory.sync()
-            const { id: subcategoryId } = await Subcategory.findOne({
-                where: { slug: subcategory.slug },
-                attributes: ['id'],
-            })
-            for (let project of subcategory.projects) {
-                const altURLs =
-                    typeof project.altURLs === 'string'
-                        ? project.altURLs
-                        : project.altURLs.join(';;;')
-                await Project.create({ ...project, altURLs, subcategoryId })
+        Category.create(category).then((categoryModel) => {
+            for (let subcategory of category.subcategories) {
+                Subcategory.create({
+                    categoryId: categoryModel.id,
+                    ...subcategory,
+                }).then(async (subcategoryModel) => {
+                    for (let project of subcategory.projects) {
+                        const altURLs = project.altURLs.join(urlListSeparator)
+                        await Project.create({
+                            ...project,
+                            subcategoryId: subcategoryModel.id,
+                            categoryId: categoryModel.id,
+                            altURLs,
+                        })
+                    }
+                })
             }
-            Project.sync()
-        }
+        })
     }
 
     if (fs.existsSync(errorsLocation)) fs.truncateSync(errorsLocation)
     fs.writeFileSync(errorsLocation, JSON.stringify({ parsingErrors, asyncErrors }, null, 2))
 
-    db.sync()
+    await db.sync()
     progress.succeed(`Data saved to file "${databaseLocation}"`)
     console.log(`Saved data to file: ${databaseLocation}`)
 }

@@ -1,20 +1,30 @@
 /** @format */
 
-import { Middleware, TCategoryPreview, TCategory } from '../../typing'
+import sequelize from 'sequelize'
 
-import database from '../../public/database.json'
+import { Middleware, TCategoryPreview } from '../../typing'
+import { Category, Subcategory, Project } from '../../utils/db'
 
-const preview: TCategoryPreview[] = (database.categories as TCategory[]).map((cat) => ({
-    ...cat,
-    subcategories: cat.subcategories.map((sub) => ({
-        name: sub.name,
-        slug: sub.slug,
-        repoCount: sub.repositories.length,
-    })),
-}))
-
-const overview: Middleware<{ overview: TCategoryPreview[] }> = (req, res) => {
-    res.json({ overview: preview })
+const overview: Middleware<{ overview: TCategoryPreview[] }> = async (req, res) => {
+    const overview = await Category.findAll({
+        attributes: ['name', 'slug'],
+        include: [
+            {
+                model: Subcategory,
+                attributes: [
+                    'name',
+                    'slug',
+                    [
+                        sequelize.fn('COUNT', sequelize.col('subcategories.projects.id')),
+                        'repoCount',
+                    ],
+                ],
+                include: [{ model: Project, attributes: [] }],
+            },
+        ],
+        group: ['subcategories.id'],
+    })
+    res.json({ overview })
 }
 
 export default overview

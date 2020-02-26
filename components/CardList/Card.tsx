@@ -4,22 +4,19 @@ import React from 'react'
 
 import { Icon } from './Icon'
 import styles from './Card.module.css'
-import { cropText, formatNumber } from '../../utils'
+
 import { TProject } from '../../typing'
+import { cropText, formatNumber } from '../../utils'
+import consts from '../../utils/consts'
 
 interface CardProps {
     repo: TProject
 }
 
 const Card: React.FC<CardProps> = ({ repo }) => {
-    const {
-        npmDownloadsThisMonth: downloads,
-        githubLastUpdate: date,
-        githubStars: stars,
-        name,
-        githubURL,
-        altURLs,
-    } = repo
+    const { npmDownloadsThisMonth: downloads, githubStars: stars, name, githubURL, altURLs } = repo
+    const date = repo.githubLastRelease || repo.githubLastPush
+    const urls = altURLs === '' ? [] : altURLs.split(consts.urlListSeparator)
 
     const description = cropText(repo.description)
 
@@ -30,17 +27,17 @@ const Card: React.FC<CardProps> = ({ repo }) => {
                     className={styles.link}
                     target="_blank"
                     rel="noreferrer noopener"
-                    href={githubURL || altURLs[0]}
+                    href={githubURL || urls[0]}
                 >
                     <div className={styles.header}>{name}</div>
                     <div className={styles.separator} />
                     <div className={styles.description}>{description}</div>
                 </a>
                 <div className={styles.description_links}>
-                    {altURLs.length > 0 && (
+                    {urls.length > 0 && (
                         <>
                             Sources
-                            {altURLs.map((url) => (
+                            {urls.map((url) => (
                                 <a
                                     className={styles.link}
                                     href={url}
