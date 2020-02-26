@@ -9,14 +9,12 @@ interface SubcategoryProps {
     name: string
     slug: string
     repoCount: number
-    isAll?: boolean
 }
 
-const SubcategoryDropdown: React.FC<SubcategoryProps> = ({ name, slug, repoCount, isAll }) => {
-    const href = isAll ? '/topic/[category]' : '/topic/[category]/[subcategory]'
+const SubcategoryDropdown: React.FC<SubcategoryProps> = ({ name, slug, repoCount }) => {
     return (
         <div className="d-flex">
-            <Link as={`/topic/${slug}`} href={href}>
+            <Link as={`/topic/${slug}`} href={'/topic/[category]/[subcategory]'}>
                 <a className={styles.link}>
                     {name} ({repoCount})
                 </a>
