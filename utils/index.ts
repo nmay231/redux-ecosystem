@@ -1,4 +1,5 @@
 /** @format */
+import { TProjectFlat } from '~/typing'
 
 export const cropText = (str: string, length = 200) => {
     return str.length > length ? str.slice(0, length) + '...' : str
@@ -12,30 +13,26 @@ export const formatNumber = (n: number) => {
 }
 
 export const formatDate = (dateStr: string) => {
-    //
+    return dateStr
 }
 
-export const sortByNPM = (a: any, b: any) => {
-    const aNPM = a.npm_download_since_last_month ? a.npm_download_since_last_month : 0
-    const bNPM = b.npm_download_since_last_month ? b.npm_download_since_last_month : 0
+export const sortByNPM = (a: TProjectFlat, b: TProjectFlat) => {
+    const aNPM = a.npmDownloadsThisMonth ? a.npmDownloadsThisMonth : 0
+    const bNPM = b.npmDownloadsThisMonth ? b.npmDownloadsThisMonth : 0
 
     return bNPM - aNPM
 }
 
-export const sortByGithub = (a: any, b: any) => {
-    return b['github_star'] - a['github_star']
+export const sortByGithub = (a: TProjectFlat, b: TProjectFlat) => {
+    return b.githubStars - a.githubStars
 }
 
-export const sortByDefault = (a: any, b: any) => {
+export const sortByDefault = (a: TProjectFlat, b: TProjectFlat) => {
     const aSortValue =
-        a.npm_download_since_last_month > a.github_star
-            ? a.npm_download_since_last_month
-            : a.github_star || 0
+        a.npmDownloadsThisMonth > a.githubStars ? a.npmDownloadsThisMonth : a.githubStars || 0
 
     const bSortValue =
-        b.npm_download_since_last_month > b.github_star
-            ? b.npm_download_since_last_month
-            : b.github_star || 0
+        b.npmDownloadsThisMonth > b.githubStars ? b.npmDownloadsThisMonth : b.githubStars || 0
 
     if (bSortValue > aSortValue) {
         return 1

@@ -16,6 +16,7 @@ interface GetInitialProps {
     singleCategory: TCategory
 }
 
+// eslint-disable-next-line @typescript-eslint/no-use-before-define
 type MergedProps = ConnectedProps<typeof connectToRedux> & GetInitialProps
 
 const Subcategory: NextPage<MergedProps, GetInitialProps> = ({ overview, singleCategory }) => {

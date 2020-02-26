@@ -1,6 +1,5 @@
 /** @format */
 
-import React from 'react'
 import { connect, ConnectedProps } from 'react-redux'
 import { NextPage } from 'next'
 
@@ -9,6 +8,7 @@ import Layout from '~/components/Layout'
 import consts from '~/utils/consts'
 import { ReduxState } from '~/typing'
 
+// eslint-disable-next-line @typescript-eslint/no-use-before-define
 const Root: NextPage<ConnectedProps<typeof connectToRedux>> = ({ overview }) => {
     return (
         <Layout
@@ -25,7 +25,6 @@ const Root: NextPage<ConnectedProps<typeof connectToRedux>> = ({ overview }) => 
 }
 
 const connectToRedux = connect((state: ReduxState) => ({
-    projects: state.rawProjects,
     overview: state.overview,
 }))
 

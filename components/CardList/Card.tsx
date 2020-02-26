@@ -39,10 +39,11 @@ const Card: React.FC<CardProps> = ({ repo }) => {
                             Sources
                             {urls.map((url) => (
                                 <a
+                                    key={url}
                                     className={styles.link}
                                     href={url}
                                     target="_blank"
-                                    rel="norefferer noopener"
+                                    rel="noopener noreferrer"
                                 >
                                     <Icon key={url} icon="link" />
                                     {cropText(url.split('://')[1] || url, 40)}

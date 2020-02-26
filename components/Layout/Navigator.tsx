@@ -5,9 +5,7 @@ import Link from 'next/link'
 
 import styles from './Navigator.module.css'
 
-interface NavigatorProps {}
-
-const Navigator: React.FC<NavigatorProps> = ({}) => {
+const Navigator: React.FC = () => {
     return (
         <nav>
             <div className={styles.brand}>

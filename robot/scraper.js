@@ -1,4 +1,7 @@
 /** @format */
+/* eslint-disable no-undef */
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 const fetch = require('isomorphic-fetch')
 const { execSync } = require('child_process')
@@ -200,7 +203,8 @@ const makeGithubQuery = (owner, name) => `
 const batchGithubRequest = async (projects) => {
     const queries = projects.map((project, i) => {
         if (!project.githubURL) return ''
-        const [, , , repoOwner, repoName, ...stuff] = project.githubURL.split('/')
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const [, , , repoOwner, repoName, ...stuff] = project.githubURL.split('/') // eslint-disable-line no-unused-vars
         return `repo${i}: ` + makeGithubQuery(repoOwner, repoName)
     })
     const masterQuery = `query { ${queries.join(' ')} }`
@@ -238,6 +242,7 @@ const batchGithubRequest = async (projects) => {
     return { projects, errors }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-use-before-define
 main().catch((err) => {
     console.error(err)
     process.exit(1)

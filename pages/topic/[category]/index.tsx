@@ -1,6 +1,5 @@
 /** @format */
 
-import React, { useMemo } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { connect, ConnectedProps } from 'react-redux'
@@ -16,6 +15,7 @@ interface GetInitialProps {
     singleCategory: TCategory
 }
 
+// eslint-disable-next-line @typescript-eslint/no-use-before-define
 type MergedProps = ConnectedProps<typeof connectToRedux> & GetInitialProps
 
 const Category: NextPage<MergedProps, GetInitialProps> = ({ overview, singleCategory }) => {
