@@ -32,7 +32,9 @@ export interface TProjectFlat {
     name: string
     description: string
     githubURL: string
-    githubLastUpdate: string
+    githubLastRelease: string
+    githubLastPush: string
+    githubIsArchived: boolean
     githubStars: number
     altURLs: string[]
     npmDownloadsThisMonth: number
