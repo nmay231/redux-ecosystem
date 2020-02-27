@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import Category from './Category'
 import styles from './index.module.css'
@@ -22,7 +23,19 @@ const scrollBarStyle = (percentage: number): React.HTMLAttributes<HTMLDivElement
 })
 
 const Dropdown: React.FC<DropdownProps> = ({ categories }) => {
+    const router = useRouter()
+    const { category: slug } = router.query as { category: string }
+
     const [scrollPercentage, setScrollPercentage] = useState(0)
+
+    useEffect(() => {
+        const index = categories.findIndex((cat) => cat.slug === slug)
+        const scrolled = index / categories.length
+
+        const sidebar = document.getElementById(dropdownId)
+        console.log(scrolled * (sidebar.scrollHeight - sidebar.clientHeight))
+        sidebar.scrollTop = scrolled * (sidebar.scrollHeight - sidebar.clientHeight)
+    }, [slug])
 
     const handleScrollBar: React.UIEventHandler<HTMLDivElement> = (e) => {
         const scroll = e.currentTarget.scrollTop
