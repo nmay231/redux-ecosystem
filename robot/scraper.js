@@ -8,11 +8,11 @@ const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const ora = require('ora')
-const sequelize = require('sequelize')
 
 const { get: getNPMStats } = require('download-stats')
 const { parse: parseMarkdown } = require('remark')
 
+const { Category, Subcategory, Project, db } = require('../utils/db/init')
 const { githubAPIKey, urlListSeparator } = require('../utils/consts')
 const errorsLocation = path.resolve(__dirname, 'errors.json')
 const repoLocation = path.resolve(__dirname, 'links')
@@ -305,63 +305,26 @@ async function main() {
     const databaseLocation = path.resolve(__dirname, '../database.sqlite')
     const progress = ora('Creating database...').start()
 
-    const db = new sequelize.Sequelize({
-        dialect: 'sqlite',
-        storage: databaseLocation,
-        logging: false,
-    })
-
-    const Category = db.define('category', {
-        name: sequelize.TEXT,
-        slug: sequelize.TEXT,
-    })
-
-    const Subcategory = db.define('subcategory', {
-        name: sequelize.TEXT,
-        slug: sequelize.TEXT,
-    })
-    // setup many-to-one relationship
-    Category.hasMany(Subcategory)
-    Subcategory.belongsTo(Category)
-
-    const Project = db.define('project', {
-        name: sequelize.TEXT,
-        description: sequelize.TEXT,
-        githubURL: sequelize.TEXT,
-        altURLs: sequelize.TEXT,
-        githubStars: sequelize.INTEGER,
-        githubLastRelease: sequelize.DATEONLY,
-        githubLastPush: sequelize.DATEONLY,
-        githubIsArchived: sequelize.BOOLEAN,
-        npmDownloadsThisMonth: sequelize.INTEGER,
-    })
-    Category.hasMany(Project)
-    Subcategory.hasMany(Project)
-    Project.belongsTo(Category)
-    Project.belongsTo(Subcategory)
-
     // Drop old tables and create new ones
     await db.sync({ force: true })
 
     for (let category of final) {
-        Category.create(category).then((categoryModel) => {
-            for (let subcategory of category.subcategories) {
-                Subcategory.create({
-                    categoryId: categoryModel.id,
-                    ...subcategory,
-                }).then(async (subcategoryModel) => {
-                    for (let project of subcategory.projects) {
-                        const altURLs = project.altURLs.join(urlListSeparator)
-                        await Project.create({
-                            ...project,
-                            subcategoryId: subcategoryModel.id,
-                            categoryId: categoryModel.id,
-                            altURLs,
-                        })
-                    }
+        const categoryInstance = await Category.create(category)
+        for (let subcategory of category.subcategories) {
+            const subcategoryInstance = await Subcategory.create({
+                categoryId: categoryInstance.id,
+                ...subcategory,
+            })
+            for (let project of subcategory.projects) {
+                const altURLs = project.altURLs.join(urlListSeparator)
+                await Project.create({
+                    ...project,
+                    subcategoryId: subcategoryInstance.id,
+                    categoryId: categoryInstance.id,
+                    altURLs,
                 })
             }
-        })
+        }
     }
 
     if (fs.existsSync(errorsLocation)) fs.truncateSync(errorsLocation)

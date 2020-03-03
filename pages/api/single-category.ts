@@ -1,10 +1,10 @@
 /** @format */
 
-import { Middleware, TCategory } from '~/typing'
+import { Middleware } from '~/typing'
 
 import { Category, Subcategory, Project } from '~/utils/db'
 
-const singleCategory: Middleware<{ singleCategory: TCategory }> = async (req, res) => {
+const singleCategory: Middleware = async (req, res) => {
     const { categorySlug } = req.query
 
     if (!categorySlug) {
