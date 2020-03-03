@@ -3,7 +3,7 @@
 import React from 'react'
 
 import Meta from './Meta'
-import Dropdown from '../Dropdown'
+import Sidebar from '../Sidebar'
 import Navigator from './Navigator'
 
 import styles from './index.module.css'
@@ -32,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({
             <main className="d-flex">
                 {includeSidebar && (
                     <div className={styles.sidebar}>
-                        <Dropdown categories={categories} />
+                        <Sidebar categories={categories} />
                         <div className={styles.divider}></div>
                     </div>
                 )}

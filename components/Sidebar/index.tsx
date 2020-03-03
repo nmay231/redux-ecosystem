@@ -7,11 +7,11 @@ import Category from './Category'
 import styles from './index.module.css'
 import { TCategoryPreview } from '~/typing'
 
-interface DropdownProps {
+interface SidebarProps {
     categories: TCategoryPreview[]
 }
 
-const dropdownId = 'dropdownDiv'
+const sidebarId = 'sidebarDiv'
 
 const scrollBarStyle = (percentage: number): React.HTMLAttributes<HTMLDivElement>['style'] => ({
     width: '3px',
@@ -22,7 +22,7 @@ const scrollBarStyle = (percentage: number): React.HTMLAttributes<HTMLDivElement
     right: '3px',
 })
 
-const Dropdown: React.FC<DropdownProps> = ({ categories }) => {
+const Sidebar: React.FC<SidebarProps> = ({ categories }) => {
     const router = useRouter()
     const { category: slug } = router.query as { category: string }
 
@@ -32,7 +32,7 @@ const Dropdown: React.FC<DropdownProps> = ({ categories }) => {
         const index = categories.findIndex((cat) => cat.slug === slug)
         const scrolled = index / categories.length
 
-        const sidebar = document.getElementById(dropdownId)
+        const sidebar = document.getElementById(sidebarId)
         console.log(scrolled * (sidebar.scrollHeight - sidebar.clientHeight))
         sidebar.scrollTop = scrolled * (sidebar.scrollHeight - sidebar.clientHeight)
     }, [slug])
@@ -44,7 +44,7 @@ const Dropdown: React.FC<DropdownProps> = ({ categories }) => {
     }
 
     return (
-        <div className={styles.main} id={dropdownId} onScroll={handleScrollBar}>
+        <div className={styles.main} id={sidebarId} onScroll={handleScrollBar}>
             <ul className="pl-0 pt-2">
                 {categories.map((cat) => (
                     <Category key={cat.slug} category={cat} />
@@ -55,4 +55,4 @@ const Dropdown: React.FC<DropdownProps> = ({ categories }) => {
     )
 }
 
-export default Dropdown
+export default Sidebar

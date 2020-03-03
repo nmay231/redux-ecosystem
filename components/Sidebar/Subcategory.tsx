@@ -11,7 +11,7 @@ interface SubcategoryProps {
     repoCount: number
 }
 
-const SubcategoryDropdown: React.FC<SubcategoryProps> = ({ name, slug, repoCount }) => {
+const SubcategorySidebar: React.FC<SubcategoryProps> = ({ name, slug, repoCount }) => {
     return (
         <div className="d-flex">
             <Link as={`/topic/${slug}`} href={'/topic/[category]/[subcategory]'}>
@@ -23,4 +23,4 @@ const SubcategoryDropdown: React.FC<SubcategoryProps> = ({ name, slug, repoCount
     )
 }
 
-export default SubcategoryDropdown
+export default SubcategorySidebar

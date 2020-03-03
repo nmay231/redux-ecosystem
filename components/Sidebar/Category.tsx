@@ -6,13 +6,13 @@ import Link from 'next/link'
 
 import styles from './Category.module.css'
 import { TCategoryPreview } from '~/typing'
-import SubcategoryDropdown from './Subcategory'
+import SubcategorySidebar from './Subcategory'
 
 interface CategoryProps {
     category: TCategoryPreview
 }
 
-const CategoryDropdown: React.FC<CategoryProps> = ({ category }) => {
+const CategorySidebar: React.FC<CategoryProps> = ({ category }) => {
     const router = useRouter()
     const { category: categorySlug } = router.query as { category: string }
 
@@ -33,7 +33,7 @@ const CategoryDropdown: React.FC<CategoryProps> = ({ category }) => {
                     {category.slug === categorySlug &&
                         category.subcategories.length > 1 &&
                         category.subcategories.map((sub) => (
-                            <SubcategoryDropdown
+                            <SubcategorySidebar
                                 key={sub.slug}
                                 name={sub.name}
                                 slug={`${category.slug}/${sub.slug}`}
@@ -46,4 +46,4 @@ const CategoryDropdown: React.FC<CategoryProps> = ({ category }) => {
     )
 }
 
-export default CategoryDropdown
+export default CategorySidebar
