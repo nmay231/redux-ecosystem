@@ -11,11 +11,14 @@ import fetch from '~/utils/fetch'
 import consts from '~/utils/consts'
 import { TCategory, ReduxState } from '~/typing'
 
+const connectToRedux = connect((state: ReduxState) => ({
+    overview: state.overview,
+}))
+
 interface GetInitialProps {
     singleCategory: TCategory
 }
 
-// eslint-disable-next-line @typescript-eslint/no-use-before-define
 type MergedProps = ConnectedProps<typeof connectToRedux> & GetInitialProps
 
 const Category: NextPage<MergedProps, GetInitialProps> = ({ overview, singleCategory }) => {
@@ -33,15 +36,11 @@ const Category: NextPage<MergedProps, GetInitialProps> = ({ overview, singleCate
     )
 }
 
-Category.getInitialProps = async ({ asPath }) => {
-    const categorySlug = asPath.split('/')[2]
+Category.getInitialProps = async ({ query }) => {
+    const { category: categorySlug } = query
     const r2 = await fetch(`/api/single-category?categorySlug=${categorySlug}`)
     const { singleCategory } = await r2.json()
     return { singleCategory }
 }
-
-const connectToRedux = connect((state: ReduxState) => ({
-    overview: state.overview,
-}))
 
 export default connectToRedux(Category)

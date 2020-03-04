@@ -16,7 +16,10 @@ interface GetInitialProps {
     singleCategory: TCategory
 }
 
-// eslint-disable-next-line @typescript-eslint/no-use-before-define
+const connectToRedux = connect((state: ReduxState) => ({
+    overview: state.overview,
+}))
+
 type MergedProps = ConnectedProps<typeof connectToRedux> & GetInitialProps
 
 const Subcategory: NextPage<MergedProps, GetInitialProps> = ({ overview, singleCategory }) => {
@@ -44,15 +47,11 @@ const Subcategory: NextPage<MergedProps, GetInitialProps> = ({ overview, singleC
     )
 }
 
-Subcategory.getInitialProps = async ({ asPath }) => {
-    const categorySlug = asPath.split('/')[2]
+Subcategory.getInitialProps = async ({ query }) => {
+    const { category: categorySlug } = query
     const r2 = await fetch(`/api/single-category?categorySlug=${categorySlug}`)
     const { singleCategory } = await r2.json()
     return { singleCategory }
 }
-
-const connectToRedux = connect((state: ReduxState) => ({
-    overview: state.overview,
-}))
 
 export default connectToRedux(Subcategory)

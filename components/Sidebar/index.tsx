@@ -33,7 +33,6 @@ const Sidebar: React.FC<SidebarProps> = ({ categories }) => {
         const scrolled = index / categories.length
 
         const sidebar = document.getElementById(sidebarId)
-        console.log(scrolled * (sidebar.scrollHeight - sidebar.clientHeight))
         sidebar.scrollTop = scrolled * (sidebar.scrollHeight - sidebar.clientHeight)
     }, [slug])
 

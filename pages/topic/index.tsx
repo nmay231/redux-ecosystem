@@ -9,7 +9,10 @@ import Layout from '~/components/Layout'
 import consts from '~/utils/consts'
 import { ReduxState } from '~/typing'
 
-// eslint-disable-next-line @typescript-eslint/no-use-before-define
+const connectToRedux = connect((state: ReduxState) => ({
+    overview: state.overview,
+}))
+
 const TopicRoot: NextPage<ConnectedProps<typeof connectToRedux>> = ({ overview }) => {
     return (
         <Layout
@@ -24,9 +27,5 @@ const TopicRoot: NextPage<ConnectedProps<typeof connectToRedux>> = ({ overview }
         </Layout>
     )
 }
-
-const connectToRedux = connect((state: ReduxState) => ({
-    overview: state.overview,
-}))
 
 export default connectToRedux(TopicRoot)

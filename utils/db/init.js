@@ -40,15 +40,15 @@ Subcategory.belongsTo(Category)
 class Project extends Sequelize.Model {}
 Project.init(
     {
-        name: sequelize.TEXT,
-        description: sequelize.TEXT,
-        githubURL: sequelize.TEXT,
-        altURLs: sequelize.TEXT,
-        githubStars: sequelize.INTEGER,
-        githubLastRelease: sequelize.DATEONLY,
-        githubLastPush: sequelize.DATEONLY,
-        githubIsArchived: sequelize.BOOLEAN,
-        npmDownloadsThisMonth: sequelize.INTEGER,
+        name: Sequelize.TEXT,
+        description: Sequelize.TEXT,
+        githubURL: Sequelize.TEXT,
+        altURLs: Sequelize.TEXT,
+        githubStars: Sequelize.INTEGER,
+        githubLastRelease: Sequelize.DATEONLY,
+        githubLastPush: Sequelize.DATEONLY,
+        githubIsArchived: Sequelize.BOOLEAN,
+        npmDownloadsThisMonth: Sequelize.INTEGER,
     },
     {
         sequelize,
