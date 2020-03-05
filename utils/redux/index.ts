@@ -14,6 +14,8 @@ const reducer: Reducer<ReduxState> = (state: ReduxState = initialState, action) 
     switch (action.type) {
         case 'INITIAL_DATA':
             return { ...state, rawProjects: action.all, overview: action.overview }
+        case 'UPDATE_PROJECTS':
+            return { ...state, rawProjects: action.projects }
         default:
             return state
     }
@@ -23,6 +25,11 @@ export const initialData = (all: ReduxState['rawProjects'], overview?: ReduxStat
     type: 'INITIAL_DATA',
     all,
     overview,
+})
+
+export const updateProjects = (projects: ReduxState['rawProjects']) => ({
+    type: 'UPDATE_PROJECTS',
+    projects,
 })
 
 export const makeStore: MakeStore = (initialState_ = initialState) => {

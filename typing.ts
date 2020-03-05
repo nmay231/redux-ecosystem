@@ -18,7 +18,7 @@ export interface TProject {
     name: string
     description: string
     githubURL: string
-    altURLs: string
+    altURLs: string[]
     githubStars: number
     githubLastRelease: string
     githubLastPush: string
@@ -27,6 +27,7 @@ export interface TProject {
 }
 
 export interface TProjectFlat {
+    id: number
     category: Pick<TCategory, 'name' | 'slug'>
     subcategory: Pick<TSubcategory, 'name' | 'slug'>
     name: string

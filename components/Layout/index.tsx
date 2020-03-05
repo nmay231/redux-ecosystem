@@ -36,8 +36,8 @@ const Layout: React.FC<LayoutProps> = ({
                         <div className={styles.divider}></div>
                     </div>
                 )}
-                <div className={styles.content}>
-                    <div className="col-12">{children}</div>
+                <div className={includeSidebar ? styles.contentWithSidebar : styles.content}>
+                    <div>{children}</div>
                 </div>
             </main>
         </div>

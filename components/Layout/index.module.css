@@ -29,7 +29,12 @@
     height: 100vh;
 }
 
-.content {
+.content,
+.contentWithSidebar {
     margin-top: 4rem;
+    width: 100%;
+}
+
+.contentWithSidebar {
     margin-left: 22rem !important;
 }

@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const Sequelize = require('sequelize')
+const { urlListSeparator } = require('../consts')
 
 const sequelize = new Sequelize.Sequelize({
     dialect: 'sqlite',
@@ -43,12 +44,18 @@ Project.init(
         name: Sequelize.TEXT,
         description: Sequelize.TEXT,
         githubURL: Sequelize.TEXT,
-        altURLs: Sequelize.TEXT,
         githubStars: Sequelize.INTEGER,
         githubLastRelease: Sequelize.DATEONLY,
         githubLastPush: Sequelize.DATEONLY,
         githubIsArchived: Sequelize.BOOLEAN,
         npmDownloadsThisMonth: Sequelize.INTEGER,
+        altURLs: {
+            type: Sequelize.TEXT,
+            get() {
+                const urls = this.getDataValue('altURLs')
+                return urls ? urls.split(urlListSeparator) : []
+            },
+        },
     },
     {
         sequelize,

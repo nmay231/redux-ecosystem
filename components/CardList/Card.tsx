@@ -7,18 +7,22 @@ import styles from './Card.module.css'
 
 import { TProject } from '~/typing'
 import { cropText, formatNumber } from '~/utils'
-import consts from '~/utils/consts'
 
 interface CardProps {
-    repo: TProject
+    project: TProject
 }
 
-const Card: React.FC<CardProps> = ({ repo }) => {
-    const { npmDownloadsThisMonth: downloads, githubStars: stars, name, githubURL, altURLs } = repo
-    const date = repo.githubLastRelease || repo.githubLastPush
-    const urls = altURLs === '' ? [] : altURLs.split(consts.urlListSeparator)
+const Card: React.FC<CardProps> = ({ project }) => {
+    const {
+        npmDownloadsThisMonth: downloads,
+        githubStars: stars,
+        name,
+        githubURL,
+        altURLs: urls,
+    } = project
+    const date = project.githubLastRelease || project.githubLastPush
 
-    const description = cropText(repo.description)
+    const description = cropText(project.description)
 
     return (
         <div className="col-xxl-3 col-xl-4 col-lg-6 col-12 mt-3">

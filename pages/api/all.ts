@@ -6,7 +6,7 @@ import { Project, Category, Subcategory } from '~/utils/db'
 
 const topics: Middleware = async (req, res) => {
     const all = await Project.findAll({
-        attributes: { exclude: ['id', 'createdAt', 'updatedAt', 'categoryId', 'subcategoryId'] },
+        attributes: { exclude: ['createdAt', 'updatedAt', 'categoryId', 'subcategoryId'] },
         include: [
             {
                 model: Subcategory,
