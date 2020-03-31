@@ -22,7 +22,7 @@
         "bootstrap": "^4.4.1",
         "download-stats": "^0.3.4",
         "isomorphic-fetch": "^2.2.1",
-        "next": "^9.2.1",
+        "next": "^9.3.2",
         "next-redux-wrapper": "^4.0.1",
         "ora": "^4.0.3",
         "react": "^16.12.0",
